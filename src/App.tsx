@@ -165,6 +165,11 @@ export default function App() {
       if (saved) {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed) && parsed.length > 0) {
+          // Invalidate legacy 40º BPM/I staff cache so 22º BPM/I loads immediately
+          if (parsed.some((m: StaffMember) => m.local?.includes('40º') || m.unit?.includes('40º')) && !parsed.some((m: StaffMember) => m.name?.includes('RODRIGO') || m.re?.includes('120684'))) {
+            try { localStorage.removeItem(STORAGE_KEYS.STAFF); } catch {}
+            return [];
+          }
           const clean = parsed.filter(isRealStaffMember);
           // Fill missing phone numbers and sync canonical function / driver / vehicle from INITIAL_STAFF
           const synced = clean.map((item: StaffMember) => {
@@ -194,6 +199,14 @@ export default function App() {
       if (saved) {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed) && parsed.length > 0) {
+          // Invalidate legacy 40º BPM/I schools cache so 22º BPM/I loads immediately
+          if (
+            parsed.some((s: SchoolItem) => s.city === 'ALUMÍNIO' || s.city === 'VOTORANTIM') &&
+            !parsed.some((s: SchoolItem) => s.city === 'ALAMBARI' || s.city === 'ITAPETININGA')
+          ) {
+            try { localStorage.removeItem(STORAGE_KEYS.SCHOOLS); } catch {}
+            return [];
+          }
           // Self-heal any legacy corrupted cache or unassigned municipalities
           const healed = parsed.map((s: SchoolItem) => {
             let item = { ...s };
@@ -312,6 +325,11 @@ export default function App() {
       const saved = localStorage.getItem(STORAGE_KEYS.CONFIG);
       if (saved) {
         const parsed = JSON.parse(saved);
+        // Invalidate legacy 40º BPM/I sheetsConfig
+        if (parsed.fixedStaffSheetId && parsed.fixedStaffSheetId.includes('1SlH6v0JzG')) {
+          try { localStorage.removeItem(STORAGE_KEYS.CONFIG); } catch {}
+          return DEFAULT_SHEETS_CONFIG;
+        }
         return {
           ...DEFAULT_SHEETS_CONFIG,
           ...parsed,
