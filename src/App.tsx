@@ -807,12 +807,13 @@ export default function App() {
     }
   };
 
-  // Atualização automática em segundo plano das planilhas na inicialização do app
-  // Garante que qualquer policial ou oficial que abrir o app (mesmo sem senha de supervisão)
-  // tenha a escala e os postos mais recentes atualizados automaticamente.
+  // Atualização automática em segundo plano das planilhas na inicialização e periodicamente
+  // Garante que qualquer alteração ou nova escala preenchida no Google Sheets seja
+  // refletida no aplicativo automaticamente, sem necessidade de senha nem intervenção manual.
   useEffect(() => {
     let isMounted = true;
-    const autoRefreshTimer = setTimeout(async () => {
+
+    const runSync = async () => {
       if (!isMounted) return;
       if (!sheetsConfig.fixedStaffSheetId) return;
 
@@ -829,11 +830,18 @@ export default function App() {
       } catch (err) {
         console.warn('[AutoSync] Atualização automática de planilhas:', err);
       }
-    }, 1200);
+    };
+
+    // 1. Atualização inicial rápida (1.2s após abrir o app)
+    const initialTimer = setTimeout(runSync, 1200);
+
+    // 2. Atualização periódica a cada 5 minutos enquanto o app estiver aberto na tela
+    const periodicInterval = setInterval(runSync, 5 * 60 * 1000);
 
     return () => {
       isMounted = false;
-      clearTimeout(autoRefreshTimer);
+      clearTimeout(initialTimer);
+      clearInterval(periodicInterval);
     };
   }, [sheetsConfig.fixedStaffSheetId, sheetsConfig.motorizedStaffSheetId, sheetsConfig.coordinatesSheetId]);
 
