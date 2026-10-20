@@ -7,18 +7,18 @@ import type { StaffMember, SchoolItem } from '../types.ts';
  */
 export const INITIAL_STAFF: StaffMember[] = [
   {
-    "re": "ND-1",
+    "re": "960442-1",
     "name": "RODRIGO COSTA MENDES",
     "rank": "Ten Cel PM",
     "function": "Comandante",
     "local": "22º BPM/I",
     "phone": "15 997128179",
-    "vehicle": "17-183",
+    "vehicle": "I-22000",
     "shiftRaw": "Manhã - 06H ÀS 13H",
     "unit": "22º BPM/I"
   },
   {
-    "re": "ND-2",
+    "re": "990111-6",
     "name": "JOÃO PAULO DE MIRANDA",
     "rank": "Maj PM",
     "function": "Subcomandante",
@@ -29,13 +29,13 @@ export const INITIAL_STAFF: StaffMember[] = [
     "unit": "22º BPM/I"
   },
   {
-    "re": "ND-3",
+    "re": "100385-2",
     "name": "EDER VIEIRA BUENO",
     "rank": "Maj PM",
     "function": "Coordenador Operacional",
     "local": "22º BPM/I",
     "phone": "15 997386186",
-    "vehicle": "17-183",
+    "vehicle": "I-22001",
     "shiftRaw": "Tarde - 13H ao Término",
     "unit": "22º BPM/I"
   },
@@ -46,7 +46,7 @@ export const INITIAL_STAFF: StaffMember[] = [
     "function": "Motorista Comandante",
     "local": "22º BPM/I",
     "phone": "15 997895888",
-    "vehicle": "17-183",
+    "vehicle": "I-22000",
     "shiftRaw": "Tarde - 13H ao Término",
     "unit": "22º BPM/I"
   },
@@ -62,13 +62,13 @@ export const INITIAL_STAFF: StaffMember[] = [
     "unit": "22º BPM/I"
   },
   {
-    "re": "ND-6",
-    "name": "Motorista Coordenador Operacional",
-    "rank": "Cb PM",
-    "function": "Motorista Coordenador Operacional",
-    "local": "22º BPM/I",
-    "phone": "",
-    "vehicle": "I-40001",
+    "re": "117600-5",
+    "name": "DIEGO REALI PONCIANO MACHADO",
+    "rank": "Cap PM",
+    "function": "Supervisão Eleições",
+    "local": "3ª Cia",
+    "phone": "15 991077968",
+    "vehicle": "I-22300",
     "shiftRaw": "Manhã - 06H ÀS 13H",
     "unit": "22º BPM/I"
   },
@@ -79,7 +79,7 @@ export const INITIAL_STAFF: StaffMember[] = [
     "function": "Motorista Coordenador Operacional",
     "local": "40º BPM/I",
     "phone": "",
-    "vehicle": "I-40001",
+    "vehicle": "I-22300",
     "shiftRaw": "Tarde - 13H ao Término",
     "unit": "22º BPM/I"
   },
@@ -1380,7 +1380,7 @@ export const INITIAL_STAFF: StaffMember[] = [
 
 export const INITIAL_SCHOOLS: SchoolItem[] = [
   {
-    "id": "school-1",
+    "id": "school-ee-eduardo-soares-prof-alambari",
     "school": "EE EDUARDO SOARES-PROF.",
     "city": "ALAMBARI",
     "bairro": "CENTRO",
@@ -1398,10 +1398,26 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
       "name": "DANIELA BUENO DE OLIVEIRA",
       "rank": "CB PM",
       "phone": "(15) 996963092"
-    }
+    },
+    "amOfficers": [
+      {
+        "re": "111820-0",
+        "name": "LUIZ ANTONIO DA SILVA JUNIOR",
+        "rank": "Cb PM",
+        "phone": "(15) 998583057"
+      }
+    ],
+    "pmOfficers": [
+      {
+        "re": "120767-9",
+        "name": "DANIELA BUENO DE OLIVEIRA",
+        "rank": "CB PM",
+        "phone": "(15) 996963092"
+      }
+    ]
   },
   {
-    "id": "school-2",
+    "id": "school-emef-nivaldo-lázaro-do-carmo-cubas-alambari",
     "school": "EMEF NIVALDO LÁZARO DO CARMO CUBAS",
     "city": "ALAMBARI",
     "bairro": "DISTRITO DO TATETU",
@@ -1422,7 +1438,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-3",
+    "id": "school-emeif-luciano-josé-ramos-alambari",
     "school": "EMEIF LUCIANO JOSÉ RAMOS",
     "city": "ALAMBARI",
     "bairro": "CENTRO",
@@ -1443,7 +1459,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-4",
+    "id": "school-emeif-jose-graca-alambari",
     "school": "EMEIF JOSE GRACA",
     "city": "ALAMBARI",
     "bairro": "CERCADINHO",
@@ -1464,7 +1480,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-5",
+    "id": "school-emeif-tiago-de-jesus-martins-alambari",
     "school": "EMEIF TIAGO DE JESUS MARTINS",
     "city": "ALAMBARI",
     "bairro": "CERRADO",
@@ -1485,7 +1501,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-6",
+    "id": "school-colégio-alpis-veredas-itapetininga",
     "school": "COLÉGIO ALPIS VEREDAS",
     "city": "ITAPETININGA",
     "bairro": "CENTRO",
@@ -1503,10 +1519,26 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
       "name": "ANDRIELE VIEIRA DE CAMPOS",
       "rank": "1º Sgt PM",
       "phone": "(15) 981761442"
-    }
+    },
+    "amOfficers": [
+      {
+        "re": "149627-1",
+        "name": "THIAGO MOMBERG BORBA",
+        "rank": "Cb PM",
+        "phone": "(15) 991011228"
+      }
+    ],
+    "pmOfficers": [
+      {
+        "re": "139079-1",
+        "name": "ANDRIELE VIEIRA DE CAMPOS",
+        "rank": "1º Sgt PM",
+        "phone": "(15) 981761442"
+      }
+    ]
   },
   {
-    "id": "school-7",
+    "id": "school-colégio-anglo-itapetininga",
     "school": "COLÉGIO ANGLO",
     "city": "ITAPETININGA",
     "bairro": "VILA APARECIDA",
@@ -1524,10 +1556,26 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
       "name": "FABIO ROGERIO NOGUEIRA",
       "rank": "Cb PM",
       "phone": "(15) 997765764"
-    }
+    },
+    "amOfficers": [
+      {
+        "re": "143613-9",
+        "name": "THIAGO ALEXANDRE DE SOUZA",
+        "rank": "Cb PM",
+        "phone": "(15) 981503552"
+      }
+    ],
+    "pmOfficers": [
+      {
+        "re": "111850-1",
+        "name": "FABIO ROGERIO NOGUEIRA",
+        "rank": "Cb PM",
+        "phone": "(15) 997765764"
+      }
+    ]
   },
   {
-    "id": "school-8",
+    "id": "school-ee-astor-vasques-lopes-prof-itapetininga",
     "school": "EE ASTOR VASQUES LOPES-PROF.",
     "city": "ITAPETININGA",
     "bairro": "JARDIM BRASIL",
@@ -1548,7 +1596,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-9",
+    "id": "school-ee-ataliba-júlio-de-oliveira-prof-itapetininga",
     "school": "EE ATALIBA JÚLIO DE OLIVEIRA-PROF.",
     "city": "ITAPETININGA",
     "bairro": "VILA NOVA ITAPETININGA",
@@ -1569,7 +1617,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-10",
+    "id": "school-ee-carlos-eduardo-mattarazzo-carreira-prof-itapetininga",
     "school": "EE CARLOS EDUARDO MATTARAZZO CARREIRA-PROF.",
     "city": "ITAPETININGA",
     "bairro": "JARDIM BRASIL",
@@ -1590,7 +1638,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-11",
+    "id": "school-ee-corina-caçapava-barth-profª-itapetininga",
     "school": "EE CORINA CAÇAPAVA BARTH-PROF.ª",
     "city": "ITAPETININGA",
     "bairro": "VILA JUDITH",
@@ -1611,7 +1659,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-12",
+    "id": "school-ee-desembargador-bernardes-junior-itapetininga",
     "school": "EE DESEMBARGADOR BERNARDES JUNIOR",
     "city": "ITAPETININGA",
     "bairro": "VILA ARRUDA",
@@ -1632,7 +1680,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-13",
+    "id": "school-ee-ernesta-xavier-rabello-orsi-profª-itapetininga",
     "school": "EE ERNESTA XAVIER RABELLO ORSI-PROF.ª",
     "city": "ITAPETININGA",
     "bairro": "JARDIM ITÁLIA",
@@ -1653,7 +1701,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-14",
+    "id": "school-ee-ernestina-loureiro-miranda-profª-itapetininga",
     "school": "EE ERNESTINA LOUREIRO MIRANDA-PROF.ª",
     "city": "ITAPETININGA",
     "bairro": "VILA BELO HORIZONTE",
@@ -1674,7 +1722,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-15",
+    "id": "school-ee-euriny-de-souza-vieira-profª-itapetininga",
     "school": "EE EURINY DE SOUZA VIEIRA-PROF.ª",
     "city": "ITAPETININGA",
     "bairro": "CHAPADINHA",
@@ -1695,7 +1743,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-16",
+    "id": "school-ee-maria-de-lourdes-barreiros-carvalho-profª-itapetininga",
     "school": "EE MARIA DE LOURDES BARREIROS CARVALHO-PROF.ª",
     "city": "ITAPETININGA",
     "bairro": "ESTÂNCIA 4 IRMAOS",
@@ -1716,7 +1764,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-17",
+    "id": "school-ee-péricles-galvão-prof-itapetininga",
     "school": "EE PÉRICLES GALVÃO-PROF.",
     "city": "ITAPETININGA",
     "bairro": "CHAPADA GRANDE",
@@ -1737,7 +1785,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-18",
+    "id": "school-salão-igreja-católica-bairro-dos-palanques-itapetininga",
     "school": "SALÃO IGREJA CATÓLICA-  BAIRRO DOS PALANQUES",
     "city": "ITAPETININGA",
     "bairro": "BAIRRO DOS PALANQUES",
@@ -1758,7 +1806,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-19",
+    "id": "school-emef-benedita-vieira-de-almeida-madalena-profª-itapetininga",
     "school": "EMEF BENEDITA VIEIRA DE ALMEIDA MADALENA-PROF.ª",
     "city": "ITAPETININGA",
     "bairro": "JARDIM FLORESTAL",
@@ -1779,7 +1827,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-20",
+    "id": "school-emef-hilda-weiss-trench-profª-itapetininga",
     "school": "EMEF HILDA WEISS TRENCH-PROF.ª",
     "city": "ITAPETININGA",
     "bairro": "VILA BELO HORIZONTE",
@@ -1800,7 +1848,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-21",
+    "id": "school-emef-josé-salem-neto-prof-itapetininga",
     "school": "EMEF JOSÉ SALEM NETO-PROF.",
     "city": "ITAPETININGA",
     "bairro": "VILA ARRUDA",
@@ -1821,7 +1869,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-22",
+    "id": "school-emeif-adriana-porto-rocha-profª-itapetininga",
     "school": "EMEIF ADRIANA PORTO ROCHA-PROF.ª",
     "city": "ITAPETININGA",
     "bairro": "DISTRITO DO MORRO DO ALTO",
@@ -1842,7 +1890,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-23",
+    "id": "school-emeif-loide-lara-profª-itapetininga",
     "school": "EMEIF LOIDE LARA-PROF.ª",
     "city": "ITAPETININGA",
     "bairro": "VILA RECREIO",
@@ -1863,7 +1911,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-24",
+    "id": "school-emef-josé-pires-de-campos-itapetininga",
     "school": "EMEF JOSÉ PIRES DE CAMPOS",
     "city": "ITAPETININGA",
     "bairro": "DO RIO ACIMA",
@@ -1884,7 +1932,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-25",
+    "id": "school-emef-prof-evanilde-shirley-de-oliveira-majewski-itapetininga",
     "school": "EMEF PROF. EVANILDE SHIRLEY DE OLIVEIRA MAJEWSKI",
     "city": "ITAPETININGA",
     "bairro": "VILA PRADO",
@@ -1905,7 +1953,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-26",
+    "id": "school-emef-maria-cecília-rolim-nalesso-profª-itapetininga",
     "school": "EMEF MARIA CECÍLIA ROLIM NALESSO-PROF.ª",
     "city": "ITAPETININGA",
     "bairro": "JARDIM FOGAÇA",
@@ -1926,7 +1974,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-27",
+    "id": "school-ee-flora-prestes-césar-profª-sarapuí",
     "school": "EE FLORA PRESTES CÉSAR-PROFª",
     "city": "SARAPUÍ",
     "bairro": "CENTRO",
@@ -1947,7 +1995,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-28",
+    "id": "school-ee-maria-imaculada-cerqueira-borher-profª-sarapuí",
     "school": "EE MARIA IMACULADA CERQUEIRA BORHER-PROF.ª",
     "city": "SARAPUÍ",
     "bairro": "SÃO JOÃO",
@@ -1968,7 +2016,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-29",
+    "id": "school-emef-conceição-aparecida-holtz-santos-profª-sarapuí",
     "school": "EMEF CONCEIÇÃO APARECIDA  HOLTZ SANTOS-PROF.ª",
     "city": "SARAPUÍ",
     "bairro": "VILA ANA MARIA",
@@ -1989,7 +2037,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-30",
+    "id": "school-emef-honorina-holtz-do-amaral-profª-sarapuí",
     "school": "EMEF HONORINA HOLTZ DO AMARAL-PROF.ª",
     "city": "SARAPUÍ",
     "bairro": "DISTRITO DO COCAES",
@@ -2010,7 +2058,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-31",
+    "id": "school-emeif-celina-teresa-holtz-leme-profª-sarapuí",
     "school": "EMEIF CELINA TERESA HOLTZ LEME-PROF.ª",
     "city": "SARAPUÍ",
     "bairro": "CENTRO",
@@ -2031,7 +2079,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-32",
+    "id": "school-ee-josé-baltazar-de-souza-são-miguel-arcanjo",
     "school": "E.E. JOSÉ BALTAZAR DE SOUZA",
     "city": "SÃO MIGUEL ARCANJO",
     "bairro": "GRAMADAO",
@@ -2049,10 +2097,26 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
       "name": "ROQUE ROBERTO DE OLIVEIRA",
       "rank": "Cb PM",
       "phone": "(15) 997517172"
-    }
+    },
+    "amOfficers": [
+      {
+        "re": "142596-0",
+        "name": "LEANDRO CAVALCANTE COSTA",
+        "rank": "Sd PM",
+        "phone": "(15) 981789478"
+      }
+    ],
+    "pmOfficers": [
+      {
+        "re": "108692-8",
+        "name": "ROQUE ROBERTO DE OLIVEIRA",
+        "rank": "Cb PM",
+        "phone": "(15) 997517172"
+      }
+    ]
   },
   {
-    "id": "school-33",
+    "id": "school-ee-massanori-karazawa-são-miguel-arcanjo",
     "school": "E.E. MASSANORI KARAZAWA",
     "city": "SÃO MIGUEL ARCANJO",
     "bairro": "COLONIA PINHAL",
@@ -2070,10 +2134,26 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
       "name": "MARCELO GIOVANNI DAMIAO DO AMARAL",
       "rank": "Sd PM",
       "phone": "(15) 998402312"
-    }
+    },
+    "amOfficers": [
+      {
+        "re": "160679-4",
+        "name": "LUIZ RICARDO PALMA SEVERINO",
+        "rank": "CB PM",
+        "phone": "(15) 996783408"
+      }
+    ],
+    "pmOfficers": [
+      {
+        "re": "181670-5",
+        "name": "MARCELO GIOVANNI DAMIAO DO AMARAL",
+        "rank": "Sd PM",
+        "phone": "(15) 998402312"
+      }
+    ]
   },
   {
-    "id": "school-34",
+    "id": "school-ee-nestor-fogaça-são-miguel-arcanjo",
     "school": "E.E. NESTOR FOGAÇA",
     "city": "SÃO MIGUEL ARCANJO",
     "bairro": "CENTRO",
@@ -2091,10 +2171,26 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
       "name": "ROBERTA CAROLINA RODRIGUES DE OLIVEIRA",
       "rank": "Sd PM",
       "phone": "(15) 981083660"
-    }
+    },
+    "amOfficers": [
+      {
+        "re": "129255-2",
+        "name": "NELSON NUNES VIEIRA JUNIOR",
+        "rank": "1º Sgt PM",
+        "phone": "(15) 997853231"
+      }
+    ],
+    "pmOfficers": [
+      {
+        "re": "192215-7",
+        "name": "ROBERTA CAROLINA RODRIGUES DE OLIVEIRA",
+        "rank": "Sd PM",
+        "phone": "(15) 981083660"
+      }
+    ]
   },
   {
-    "id": "school-35",
+    "id": "school-ee-profª-maria-elisa-de-oliveira-são-miguel-arcanjo",
     "school": "E.E. PROFª MARIA ELISA DE OLIVEIRA",
     "city": "SÃO MIGUEL ARCANJO",
     "bairro": "CENTRO",
@@ -2112,10 +2208,26 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
       "name": "JOSIELE SIMONE DE LIMA",
       "rank": "Cb PM",
       "phone": "(15) 981812848"
-    }
+    },
+    "amOfficers": [
+      {
+        "re": "162969-7",
+        "name": "YRIS FERNANDA CONCEIÇAO FERREIRA",
+        "rank": "Sd PM",
+        "phone": "(15) 998336766"
+      }
+    ],
+    "pmOfficers": [
+      {
+        "re": "145074-3",
+        "name": "JOSIELE SIMONE DE LIMA",
+        "rank": "Cb PM",
+        "phone": "(15) 981812848"
+      }
+    ]
   },
   {
-    "id": "school-36",
+    "id": "school-ee-profª-maria-francisca-deoclecio-arrivabene-são-miguel-arcanjo",
     "school": "E.E. PROFª MARIA FRANCISCA DEOCLECIO ARRIVABENE",
     "city": "SÃO MIGUEL ARCANJO",
     "bairro": "COHAB 1 - JARDIM BOM JESUS",
@@ -2133,10 +2245,26 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
       "name": "ALEXANDRA BEATRIZ OLIVEIRA ALMEIDA MAROTTA",
       "rank": "Cb PM",
       "phone": "(15) 996637730"
-    }
+    },
+    "amOfficers": [
+      {
+        "re": "131741-5",
+        "name": "VANDERSON DE ALCANTARA",
+        "rank": "Cb PM",
+        "phone": "(15) 996807216"
+      }
+    ],
+    "pmOfficers": [
+      {
+        "re": "162270-6",
+        "name": "ALEXANDRA BEATRIZ OLIVEIRA ALMEIDA MAROTTA",
+        "rank": "Cb PM",
+        "phone": "(15) 996637730"
+      }
+    ]
   },
   {
-    "id": "school-37",
+    "id": "school-ee-sadamita-iwassaki-são-miguel-arcanjo",
     "school": "E.E. SADAMITA IWASSAKI",
     "city": "SÃO MIGUEL ARCANJO",
     "bairro": "ABAITINGA",
@@ -2154,10 +2282,26 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
       "name": "DIOGO DO NASCIMENTO",
       "rank": "Sd PM",
       "phone": "(15) 997917742"
-    }
+    },
+    "amOfficers": [
+      {
+        "re": "141997-8",
+        "name": "EDSON RODRIGUES",
+        "rank": "Cb PM",
+        "phone": "(15) 997892419"
+      }
+    ],
+    "pmOfficers": [
+      {
+        "re": "162203-0",
+        "name": "DIOGO DO NASCIMENTO",
+        "rank": "Sd PM",
+        "phone": "(15) 997917742"
+      }
+    ]
   },
   {
-    "id": "school-38",
+    "id": "school-emef-josé-gomide-de-castro-são-miguel-arcanjo",
     "school": "E.M.E.F. JOSÉ GOMIDE DE CASTRO",
     "city": "SÃO MIGUEL ARCANJO",
     "bairro": "CENTRO",
@@ -2175,10 +2319,18 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
       "name": "",
       "rank": "Policial Militar",
       "phone": ""
-    }
+    },
+    "amOfficers": [
+      {
+        "re": "123188-0",
+        "name": "OLIMPIO TEOFILO DO ESPIRITO SANTO NETTO",
+        "rank": "1º Sgt PM",
+        "phone": "(15) 997197759"
+      }
+    ]
   },
   {
-    "id": "school-39",
+    "id": "school-emef-prof-arcypreste-ruggeri-são-miguel-arcanjo",
     "school": "E.M.E.F. PROF. ARCYPRESTE RUGGERI",
     "city": "SÃO MIGUEL ARCANJO",
     "bairro": "CENTRO",
@@ -2196,10 +2348,26 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
       "name": "THAIS CAMARGO",
       "rank": "Cb PM",
       "phone": "(15) 996605511"
-    }
+    },
+    "amOfficers": [
+      {
+        "re": "111090-0",
+        "name": "IRINEU SOARES RODRIGUES",
+        "rank": "Cb PM",
+        "phone": "(15) 32793724"
+      }
+    ],
+    "pmOfficers": [
+      {
+        "re": "149334-5",
+        "name": "THAIS CAMARGO",
+        "rank": "Cb PM",
+        "phone": "(15) 996605511"
+      }
+    ]
   },
   {
-    "id": "school-40",
+    "id": "school-emei-prof-paulo-roberto-ortiz-de-camargo-são-miguel-arcanjo",
     "school": "E.M.E.I. PROF. PAULO ROBERTO ORTIZ DE CAMARGO",
     "city": "SÃO MIGUEL ARCANJO",
     "bairro": "VILA APARECIDA",
@@ -2217,10 +2385,26 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
       "name": "ANTONIO DO NASCIMENTO RIBEIRO",
       "rank": "Cb PM",
       "phone": "(15) 997999741"
-    }
+    },
+    "amOfficers": [
+      {
+        "re": "171941-6",
+        "name": "JULIANA BARBARA AGOSTINHO DE CARVALHO",
+        "rank": "Cb PM",
+        "phone": "(15) 997257520"
+      }
+    ],
+    "pmOfficers": [
+      {
+        "re": "991870-1",
+        "name": "ANTONIO DO NASCIMENTO RIBEIRO",
+        "rank": "Cb PM",
+        "phone": "(15) 997999741"
+      }
+    ]
   },
   {
-    "id": "school-41",
+    "id": "school-emeif-profª-carmelita-vieira-terra-dias-são-miguel-arcanjo",
     "school": "E.M.E.I.F.  PROFª CARMELITA VIEIRA TERRA DIAS",
     "city": "SÃO MIGUEL ARCANJO",
     "bairro": "GUARAREMA",
@@ -2238,10 +2422,26 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
       "name": "GERSON QUIRINO DEMETRIO VIEIRA",
       "rank": "Cb PM",
       "phone": "(15) 998221120"
-    }
+    },
+    "amOfficers": [
+      {
+        "re": "142590-A",
+        "name": "CARLOS ALBERTO DE QUEIROZ",
+        "rank": "Cb PM",
+        "phone": "(15) 998253577"
+      }
+    ],
+    "pmOfficers": [
+      {
+        "re": "141612-0",
+        "name": "GERSON QUIRINO DEMETRIO VIEIRA",
+        "rank": "Cb PM",
+        "phone": "(15) 998221120"
+      }
+    ]
   },
   {
-    "id": "school-42",
+    "id": "school-emeif-angelina-miguel-aruk-são-miguel-arcanjo",
     "school": "E.M.E.I.F. ANGELINA MIGUEL ARUK",
     "city": "SÃO MIGUEL ARCANJO",
     "bairro": "BREJAUVA",
@@ -2259,10 +2459,18 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
       "name": "",
       "rank": "Policial Militar",
       "phone": ""
-    }
+    },
+    "amOfficers": [
+      {
+        "re": "111114-A",
+        "name": "PAULO CESAR MOMBERG DE BARROS",
+        "rank": "Cb PM",
+        "phone": "(15) 997489085"
+      }
+    ]
   },
   {
-    "id": "school-43",
+    "id": "school-emeif-fermino-mendes-da-silva-são-miguel-arcanjo",
     "school": "E.M.E.I.F. FERMINO MENDES DA SILVA",
     "city": "SÃO MIGUEL ARCANJO",
     "bairro": "POCINHO",
@@ -2280,10 +2488,26 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
       "name": "BRUNO PEREIRA DA SILVA",
       "rank": "Cb PM",
       "phone": "(15) 998473745"
-    }
+    },
+    "amOfficers": [
+      {
+        "re": "152972-2",
+        "name": "ADRIANO DE SOUZA",
+        "rank": "Sd PM",
+        "phone": "(19) 999842089"
+      }
+    ],
+    "pmOfficers": [
+      {
+        "re": "181609-8",
+        "name": "BRUNO PEREIRA DA SILVA",
+        "rank": "Cb PM",
+        "phone": "(15) 998473745"
+      }
+    ]
   },
   {
-    "id": "school-44",
+    "id": "school-emeif-frofª-maria-inês-marques-mendes-são-miguel-arcanjo",
     "school": "E.M.E.I.F. FROFª MARIA INÊS MARQUES MENDES",
     "city": "SÃO MIGUEL ARCANJO",
     "bairro": "TURVINHO",
@@ -2301,10 +2525,26 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
       "name": "LEONARDO RIBEIRO CIPRIANO",
       "rank": "Cb PM",
       "phone": "(15) 998473208"
-    }
+    },
+    "amOfficers": [
+      {
+        "re": "157619-4",
+        "name": "GIOVANE DA CRUZ QUEIROZ",
+        "rank": "Sd PM",
+        "phone": "(11) 996809090"
+      }
+    ],
+    "pmOfficers": [
+      {
+        "re": "147763-3",
+        "name": "LEONARDO RIBEIRO CIPRIANO",
+        "rank": "Cb PM",
+        "phone": "(15) 998473208"
+      }
+    ]
   },
   {
-    "id": "school-45",
+    "id": "school-emeif-joaquim-nunes-vieira-são-miguel-arcanjo",
     "school": "E.M.E.I.F. JOAQUIM NUNES VIEIRA",
     "city": "SÃO MIGUEL ARCANJO",
     "bairro": "RETIRO",
@@ -2322,10 +2562,26 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
       "name": "FERNANDO HENRIQUE DOS SANTOS",
       "rank": "Cb PM",
       "phone": "(15) 992011440"
-    }
+    },
+    "amOfficers": [
+      {
+        "re": "111871-4",
+        "name": "ANDERSON DE SOUZA DINIZ",
+        "rank": "Cb PM",
+        "phone": "(15) 997662956"
+      }
+    ],
+    "pmOfficers": [
+      {
+        "re": "120641-9",
+        "name": "FERNANDO HENRIQUE DOS SANTOS",
+        "rank": "Cb PM",
+        "phone": "(15) 992011440"
+      }
+    ]
   },
   {
-    "id": "school-46",
+    "id": "school-emeif-prof-arani-josé-da-silva-são-miguel-arcanjo",
     "school": "E.M.E.I.F. PROF. ARANI JOSÉ DA SILVA",
     "city": "SÃO MIGUEL ARCANJO",
     "bairro": "JARDIM PICA-PAU",
@@ -2343,10 +2599,26 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
       "name": "SILAS GABRIEL FERREIRA",
       "rank": "Sd PM",
       "phone": "(15) 997980502"
-    }
+    },
+    "amOfficers": [
+      {
+        "re": "146554-6",
+        "name": "THIAGO JAKSON WALDOW SOTA",
+        "rank": "Cb PM",
+        "phone": "(15) 996145704"
+      }
+    ],
+    "pmOfficers": [
+      {
+        "re": "162599-3",
+        "name": "SILAS GABRIEL FERREIRA",
+        "rank": "Sd PM",
+        "phone": "(15) 997980502"
+      }
+    ]
   },
   {
-    "id": "school-47",
+    "id": "school-emeif-profª-thereza-maria-cunha-bodo-de-carvalho-são-miguel-arcanjo",
     "school": "E.M.E.I.F. PROFª THEREZA MARIA CUNHA BODO DE CARVALHO",
     "city": "SÃO MIGUEL ARCANJO",
     "bairro": "FAXINAL DOS ALMEIDAS",
@@ -2364,10 +2636,26 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
       "name": "THIAGO AUGUSTO CAMPOS RAMOS CORREA",
       "rank": "Cb PM",
       "phone": "(15) 991823355"
-    }
+    },
+    "amOfficers": [
+      {
+        "re": "145469-2",
+        "name": "ANDRE HENRIQUE LOPES DA COSTA",
+        "rank": "Cb PM",
+        "phone": "(15) 996052825"
+      }
+    ],
+    "pmOfficers": [
+      {
+        "re": "120696-6",
+        "name": "THIAGO AUGUSTO CAMPOS RAMOS CORREA",
+        "rank": "Cb PM",
+        "phone": "(15) 991823355"
+      }
+    ]
   },
   {
-    "id": "school-48",
+    "id": "school-emeif-vereador-joão-gato-são-miguel-arcanjo",
     "school": "E.M.E.I.F. VEREADOR JOÃO GATO",
     "city": "SÃO MIGUEL ARCANJO",
     "bairro": "SANTA CRUZ",
@@ -2385,10 +2673,26 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
       "name": "VANCLEI BENEDITO FOGACA",
       "rank": "Cb PM",
       "phone": "(15) 96086088"
-    }
+    },
+    "amOfficers": [
+      {
+        "re": "991815-9",
+        "name": "CRISTIANO EDUARDO POLES",
+        "rank": "Cb PM",
+        "phone": "(15) 997581366"
+      }
+    ],
+    "pmOfficers": [
+      {
+        "re": "127137-7",
+        "name": "VANCLEI BENEDITO FOGACA",
+        "rank": "Cb PM",
+        "phone": "(15) 96086088"
+      }
+    ]
   },
   {
-    "id": "school-49",
+    "id": "school-ee-cel-pedro-dias-de-campos-capela-do-alto",
     "school": "EE CEL PEDRO DIAS DE CAMPOS",
     "city": "CAPELA DO ALTO",
     "bairro": "CENTRO",
@@ -2409,7 +2713,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-50",
+    "id": "school-ee-marcílio-leite-de-almeida-capela-do-alto",
     "school": "EE MARCÍLIO LEITE DE ALMEIDA",
     "city": "CAPELA DO ALTO",
     "bairro": "CENTRO",
@@ -2430,7 +2734,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-51",
+    "id": "school-emef-bairro-do-ricardo-puccetti-capela-do-alto",
     "school": "EMEF BAIRRO DO RICARDO PUCCETTI",
     "city": "CAPELA DO ALTO",
     "bairro": "DO IPEROZINHO",
@@ -2451,7 +2755,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-52",
+    "id": "school-emef-profª-maria-elza-lázara-lopes-capela-do-alto",
     "school": "EMEF PROFª MARIA ELZA LÁZARA LOPES",
     "city": "CAPELA DO ALTO",
     "bairro": "CENTRO",
@@ -2472,7 +2776,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-53",
+    "id": "school-emef-vereador-francisco-munhoz-sanches-capela-do-alto",
     "school": "EMEF VEREADOR  FRANCISCO MUNHOZ SANCHES",
     "city": "CAPELA DO ALTO",
     "bairro": "DISTRITO DO PORTO",
@@ -2493,7 +2797,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-54",
+    "id": "school-emei-francisco-mariano-de-almeida-capela-do-alto",
     "school": "EMEI FRANCISCO MARIANO DE ALMEIDA",
     "city": "CAPELA DO ALTO",
     "bairro": "JARDIM NOVA CAPELA",
@@ -2514,7 +2818,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-55",
+    "id": "school-e-e-vereador-jose-lopes-quadra",
     "school": "E E VEREADOR JOSE LOPES",
     "city": "QUADRA",
     "bairro": "CENTRO",
@@ -2535,7 +2839,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-56",
+    "id": "school-emef-joao-ignácio-soares-quadra",
     "school": "EMEF JOAO  IGNÁCIO SOARES",
     "city": "QUADRA",
     "bairro": "CENTRO",
@@ -2556,7 +2860,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-57",
+    "id": "school-cepem-profª-benedicta-pereira-fiuza-orsi-tatuí",
     "school": "CEPEM PROFª BENEDICTA PEREIRA FIUZA ORSI",
     "city": "TATUÍ",
     "bairro": "CENTRO",
@@ -2577,7 +2881,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-58",
+    "id": "school-cepem-professora-cacilda-sá-de-oliveira-tatuí",
     "school": "CEPEM PROFESSORA CACILDA SÁ DE OLIVEIRA",
     "city": "TATUÍ",
     "bairro": "BAIRRO DOS MIRANDAS",
@@ -2598,7 +2902,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-59",
+    "id": "school-emei-do-congonhal-tatuí",
     "school": "EMEI DO CONGONHAL",
     "city": "TATUÍ",
     "bairro": "BAIRRO CONGONHAL",
@@ -2619,7 +2923,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-60",
+    "id": "school-complexo-ed-profª-maria-aparecida-camargo-voss-tatuí",
     "school": "COMPLEXO ED. PROFª MARIA APARECIDA CAMARGO VOSS",
     "city": "TATUÍ",
     "bairro": "JARDIM LIRIO",
@@ -2640,7 +2944,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-61",
+    "id": "school-ee-barão-de-suruí-tatuí",
     "school": "EE BARÃO DE SURUÍ",
     "city": "TATUÍ",
     "bairro": "CENTRO",
@@ -2661,7 +2965,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-62",
+    "id": "school-ee-chico-pereira-tatuí",
     "school": "EE CHICO PEREIRA",
     "city": "TATUÍ",
     "bairro": "CENTRO",
@@ -2682,7 +2986,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-63",
+    "id": "school-ee-prof-ary-de-almeida-sinisgalli-tatuí",
     "school": "EE PROF ARY DE ALMEIDA SINISGALLI",
     "city": "TATUÍ",
     "bairro": "VILA ESPERANCA",
@@ -2703,7 +3007,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-64",
+    "id": "school-ee-prof-deócles-vieira-de-camargo-tatuí",
     "school": "EE PROF DEÓCLES VIEIRA DE CAMARGO",
     "city": "TATUÍ",
     "bairro": "CENTRO",
@@ -2724,7 +3028,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-65",
+    "id": "school-ee-prof-fernando-guedes-de-moraes-tatuí",
     "school": "EE PROF FERNANDO GUEDES DE MORAES",
     "city": "TATUÍ",
     "bairro": "JARDIM LUCILA",
@@ -2745,7 +3049,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-66",
+    "id": "school-ee-prof-jose-celso-de-mello-tatuí",
     "school": "EE PROF JOSE CELSO DE MELLO",
     "city": "TATUÍ",
     "bairro": "CDHU",
@@ -2766,7 +3070,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-67",
+    "id": "school-ee-profª-altina-maynardes-araujo-tatuí",
     "school": "EE PROFª ALTINA MAYNARDES ARAUJO",
     "city": "TATUÍ",
     "bairro": "BOQUEIRAO",
@@ -2787,7 +3091,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-68",
+    "id": "school-ee-profª-ligia-vieira-de-camargo-del-fiol-tatuí",
     "school": "EE PROFª LIGIA VIEIRA DE CAMARGO DEL FIOL",
     "city": "TATUÍ",
     "bairro": "VILA ANGELICA",
@@ -2808,7 +3112,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-69",
+    "id": "school-ee-profª-semíramis-turelli-azevedo-tatuí",
     "school": "EE PROFª SEMÍRAMIS TURELLI AZEVEDO",
     "city": "TATUÍ",
     "bairro": "JARDIM TOKIO",
@@ -2829,7 +3133,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-70",
+    "id": "school-ee-professora-lienette-avalone-ribeiro-tatuí",
     "school": "EE PROFESSORA  LIENETTE AVALONE RIBEIRO",
     "city": "TATUÍ",
     "bairro": "VILA DOUTOR LAURINDO",
@@ -2850,7 +3154,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-71",
+    "id": "school-emef-bairro-dos-oliveiras-tatuí",
     "school": "EMEF BAIRRO DOS OLIVEIRAS",
     "city": "TATUÍ",
     "bairro": "BAIRRO DOS OLIVEIRAS",
@@ -2871,7 +3175,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-72",
+    "id": "school-emef-do-bairro-da-americana-tatuí",
     "school": "EMEF DO  BAIRRO DA AMERICANA",
     "city": "TATUÍ",
     "bairro": "BAIRRO DA AMERICANA",
@@ -2892,7 +3196,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-73",
+    "id": "school-emef-eugênio-santos-tatuí",
     "school": "EMEF EUGÊNIO SANTOS",
     "city": "TATUÍ",
     "bairro": "CENTRO",
@@ -2913,7 +3217,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-74",
+    "id": "school-emef-joão-florêncio-tatuí",
     "school": "EMEF JOÃO FLORÊNCIO",
     "city": "TATUÍ",
     "bairro": "CENTRO",
@@ -2934,7 +3238,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-75",
+    "id": "school-emef-prof-accácio-vieira-de-camargo-tatuí",
     "school": "EMEF PROF ACCÁCIO VIEIRA DE CAMARGO",
     "city": "TATUÍ",
     "bairro": "VILA SAO CRISTOVAO",
@@ -2955,7 +3259,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-76",
+    "id": "school-emef-professor-josé-tomas-borges-tatuí",
     "school": "EMEF PROFESSOR JOSÉ TOMAS BORGES",
     "city": "TATUÍ",
     "bairro": "JARDIM SANTA CRUZ",
@@ -2976,7 +3280,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-77",
+    "id": "school-emef-professora-magaly-azambuja-de-toledo-tatuí",
     "school": "EMEF PROFESSORA MAGALY AZAMBUJA DE TOLEDO",
     "city": "TATUÍ",
     "bairro": "JARDIM SANTA RITA DE CASSIA",
@@ -2997,7 +3301,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-78",
+    "id": "school-emef-professora-maria-conceição-oliveira-marcondes-tatuí",
     "school": "EMEF PROFESSORA MARIA CONCEIÇÃO OLIVEIRA MARCONDES",
     "city": "TATUÍ",
     "bairro": "VALINHOS",
@@ -3018,7 +3322,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-79",
+    "id": "school-emef-professora-maria-eli-da-silva-camargo-tatuí",
     "school": "EMEF PROFESSORA MARIA ELI DA SILVA CAMARGO",
     "city": "TATUÍ",
     "bairro": "JARDIM ROSA GARCIA",
@@ -3039,7 +3343,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-80",
+    "id": "school-emef-professora-teresinha-vieira-de-camargo-barros-tatuí",
     "school": "EMEF PROFESSORA TERESINHA VIEIRA DE CAMARGO BARROS",
     "city": "TATUÍ",
     "bairro": "JARDIM MANOEL DE ABREU",
@@ -3060,7 +3364,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-81",
+    "id": "school-emefjosé-galvão-sobrinho-tatuí",
     "school": "EMEFJOSÉ GALVÃO SOBRINHO",
     "city": "TATUÍ",
     "bairro": "JARDIM TOKIO",
@@ -3081,7 +3385,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-82",
+    "id": "school-emei-profª-maria-cristina-ferrão-vieira-martins-tatuí",
     "school": "EMEI PROFª MARIA CRISTINA FERRÃO VIEIRA MARTINS",
     "city": "TATUÍ",
     "bairro": "JARDIM GONZAGA",
@@ -3102,7 +3406,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-83",
+    "id": "school-etec-salles-gomes-tatuí",
     "school": "ETEC SALLES GOMES",
     "city": "TATUÍ",
     "bairro": "CENTRO",
@@ -3123,7 +3427,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-84",
+    "id": "school-emef-professor-paulinho-ribeiro-tatuí",
     "school": "EMEF. PROFESSOR PAULINHO RIBEIRO",
     "city": "TATUÍ",
     "bairro": "BAIRRO TANQUINHO",
@@ -3144,7 +3448,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-85",
+    "id": "school-emei-eduardo-strufaldi-tatuí",
     "school": "EMEI EDUARDO STRUFALDI",
     "city": "TATUÍ",
     "bairro": "JARDIM MODENA",
@@ -3165,7 +3469,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-86",
+    "id": "school-nebam-tatuí",
     "school": "NEBAM",
     "city": "TATUÍ",
     "bairro": "CENTRO",
@@ -3186,7 +3490,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-87",
+    "id": "school-eedr-fortunato-de-camargo-angatuba",
     "school": "E.E.DR. FORTUNATO DE CAMARGO",
     "city": "ANGATUBA",
     "bairro": "CENTRO",
@@ -3207,7 +3511,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-88",
+    "id": "school-eeivens-vieira-angatuba",
     "school": "E.E.IVENS VIEIRA",
     "city": "ANGATUBA",
     "bairro": "CENTRO",
@@ -3228,7 +3532,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-89",
+    "id": "school-eeprofessor-orestes-oris-de-albuquerque-angatuba",
     "school": "E.E.PROFESSOR ORESTES ORIS DE ALBUQUERQUE",
     "city": "ANGATUBA",
     "bairro": "RESIDENCIAL INGA",
@@ -3249,7 +3553,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-90",
+    "id": "school-emef-professora-maria-isabel-lopes-de-oliveira-angatuba",
     "school": "E.M.E.F. PROFESSORA MARIA  ISABEL LOPES DE OLIVEIRA",
     "city": "ANGATUBA",
     "bairro": "CENTRO",
@@ -3270,7 +3574,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-91",
+    "id": "school-emeif-maria-salete-basile-sales-angatuba",
     "school": "E.M.E.I.F. MARIA SALETE BASILE SALES",
     "city": "ANGATUBA",
     "bairro": "VILA VOLPI",
@@ -3291,7 +3595,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-92",
+    "id": "school-emeif-professor-afonso-basile-angatuba",
     "school": "E.M.E.I.F. PROFESSOR AFONSO BASILE",
     "city": "ANGATUBA",
     "bairro": "BOM RETIRO",
@@ -3312,7 +3616,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-93",
+    "id": "school-emeif-professora-hermínia-araújo-angatuba",
     "school": "E.M.E.I.F. PROFESSORA HERMÍNIA ARAÚJO",
     "city": "ANGATUBA",
     "bairro": "GUAREI VELHO",
@@ -3333,7 +3637,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-94",
+    "id": "school-emeif-professora-maria-inêz-dos-santos-angatuba",
     "school": "E.M.E.I.F. PROFESSORA MARIA INÊZ DOS SANTOS",
     "city": "ANGATUBA",
     "bairro": "VILA RIBEIRO",
@@ -3354,7 +3658,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-95",
+    "id": "school-ee-renato-rocha-miranda-campina-do-monte-alegre",
     "school": "E.E. RENATO ROCHA MIRANDA",
     "city": "CAMPINA DO MONTE ALEGRE",
     "bairro": "CENTRO",
@@ -3375,7 +3679,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-96",
+    "id": "school-emef-professor-enil-boris-de-morais-ferreira-campina-do-monte-alegre",
     "school": "E.M.E.F. PROFESSOR ENIL BORIS DE MORAIS FERREIRA",
     "city": "CAMPINA DO MONTE ALEGRE",
     "bairro": "VILA GOMES",
@@ -3396,7 +3700,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-97",
+    "id": "school-emef-professora-alzira-de-oliveira-garcia-campina-do-monte-alegre",
     "school": "E.M.E.F. PROFESSORA ALZIRA DE OLIVEIRA GARCIA",
     "city": "CAMPINA DO MONTE ALEGRE",
     "bairro": "CENTRO",
@@ -3417,7 +3721,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-98",
+    "id": "school-ee-cel-castanho-de-almeida-guareí",
     "school": "EE CEL CASTANHO DE ALMEIDA",
     "city": "GUAREÍ",
     "bairro": "CENTRO",
@@ -3438,7 +3742,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-99",
+    "id": "school-ee-prof-ezequiel-castanho-guareí",
     "school": "EE PROF EZEQUIEL CASTANHO",
     "city": "GUAREÍ",
     "bairro": "CENTRO",
@@ -3459,7 +3763,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-100",
+    "id": "school-emef-prof-joao-alcindo-vieira-guareí",
     "school": "EMEF PROF JOAO ALCINDO VIEIRA",
     "city": "GUAREÍ",
     "bairro": "CENTRO",
@@ -3480,7 +3784,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-101",
+    "id": "school-emei-maria-de-morais-barros-marica-neves-guareí",
     "school": "EMEI  MARIA DE MORAIS BARROS - MARICA NEVES",
     "city": "GUAREÍ",
     "bairro": "DA VITORIA",
@@ -3501,7 +3805,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-102",
+    "id": "school-emei-profª-vania-regina-vieira-de-proenca-guareí",
     "school": "EMEI PROFª VANIA REGINA VIEIRA DE PROENCA",
     "city": "GUAREÍ",
     "bairro": "CENTRO",
@@ -3522,7 +3826,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-103",
+    "id": "school-emef-julieta-rolim-da-silva-profª-itapetininga",
     "school": "EMEF JULIETA ROLIM DA SILVA - PROF.ª",
     "city": "ITAPETININGA",
     "bairro": "DISTRITO DO RECHAN",
@@ -3543,7 +3847,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-104",
+    "id": "school-emef-maria-aparecida-silva-brisolla-franci-profª-itapetininga",
     "school": "EMEF MARIA APARECIDA SILVA BRISOLLA FRANCI - PROF.ª",
     "city": "ITAPETININGA",
     "bairro": "CHAPADINHA",
@@ -3564,7 +3868,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-105",
+    "id": "school-emef-maria-gomes-dos-santos-srª-itapetininga",
     "school": "EMEF MARIA GOMES DOS SANTOS-SR.ª",
     "city": "ITAPETININGA",
     "bairro": "BAIRRO DA CONCEIÇÃO",
@@ -3585,7 +3889,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-106",
+    "id": "school-emef-profª-selma-neli-pranches-de-oliveira-itapetininga",
     "school": "EMEF PROFª SELMA NELI PRANCHES DE OLIVEIRA",
     "city": "ITAPETININGA",
     "bairro": "JARDIM BELA VISTA",
@@ -3606,7 +3910,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-107",
+    "id": "school-emef-rosa-badin-vieira-profª-itapetininga",
     "school": "EMEF ROSA BADIN VIEIRA-PROF.ª",
     "city": "ITAPETININGA",
     "bairro": "JARDIM SHANGRILA",
@@ -3627,7 +3931,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-108",
+    "id": "school-emef-zarife-yared-profª-itapetininga",
     "school": "EMEF ZARIFE YARED-PROF.ª",
     "city": "ITAPETININGA",
     "bairro": "CENTRO",
@@ -3648,7 +3952,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-109",
+    "id": "school-emeif-antonia-deoclécia-de-freitas-srª-itapetininga",
     "school": "EMEIF ANTONIA DEOCLÉCIA DE FREITAS - SR.ª",
     "city": "ITAPETININGA",
     "bairro": "GRAMADINHO",
@@ -3669,7 +3973,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-110",
+    "id": "school-emeif-bairro-do-retiro-itapetininga",
     "school": "EMEIF BAIRRO DO RETIRO",
     "city": "ITAPETININGA",
     "bairro": "BAIRRO DO RETIRO",
@@ -3690,7 +3994,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-111",
+    "id": "school-fatec-faculdade-de-tecnologia-itapetininga",
     "school": "FATEC - FACULDADE DE TECNOLOGIA",
     "city": "ITAPETININGA",
     "bairro": "VILA BARTH",
@@ -3711,7 +4015,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-112",
+    "id": "school-instituto-imaculada-conceição-itapetininga",
     "school": "INSTITUTO IMACULADA CONCEIÇÃO",
     "city": "ITAPETININGA",
     "bairro": "CENTRO",
@@ -3732,7 +4036,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-113",
+    "id": "school-posto-ambulatorial-de-saúde-itapetininga",
     "school": "POSTO AMBULATORIAL DE SAÚDE",
     "city": "ITAPETININGA",
     "bairro": "BAIRRO DO CAMPO GRANDE",
@@ -3753,7 +4057,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-114",
+    "id": "school-emef-nazira-yared-itapetininga",
     "school": "EMEF NAZIRA YARED",
     "city": "ITAPETININGA",
     "bairro": "VILA MAZZEI",
@@ -3774,7 +4078,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-115",
+    "id": "school-ee-abílio-fontes-prof-itapetininga",
     "school": "EE ABÍLIO FONTES - PROF.",
     "city": "ITAPETININGA",
     "bairro": "VILA ROSA",
@@ -3795,7 +4099,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-116",
+    "id": "school-ee-adherbal-de-paula-ferreira-itapetininga",
     "school": "EE ADHERBAL DE PAULA FERREIRA",
     "city": "ITAPETININGA",
     "bairro": "CENTRO",
@@ -3816,7 +4120,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-117",
+    "id": "school-ee-darcy-vieira-itapetininga",
     "school": "EE DARCY VIEIRA",
     "city": "ITAPETININGA",
     "bairro": "VILA BARTH",
@@ -3837,7 +4141,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-118",
+    "id": "school-ee-elisiário-martins-de-mello-prof-itapetininga",
     "school": "EE ELISIÁRIO MARTINS DE MELLO-PROF.",
     "city": "ITAPETININGA",
     "bairro": "VILA REGINA",
@@ -3858,7 +4162,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-119",
+    "id": "school-ee-evônio-marques-prof-itapetininga",
     "school": "EE EVÔNIO MARQUES-PROF.",
     "city": "ITAPETININGA",
     "bairro": "VARGINHA",
@@ -3879,7 +4183,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-120",
+    "id": "school-ee-fernando-prestes-cel-itapetininga",
     "school": "EE FERNANDO PRESTES-CEL.",
     "city": "ITAPETININGA",
     "bairro": "CENTRO",
@@ -3900,7 +4204,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-121",
+    "id": "school-ee-jair-barth-prof-itapetininga",
     "school": "EE JAIR BARTH-PROF.",
     "city": "ITAPETININGA",
     "bairro": "JARDIM BELA VISTA",
@@ -3921,7 +4225,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-122",
+    "id": "school-ee-josé-da-conceição-holtz-prof-itapetininga",
     "school": "EE JOSÉ DA CONCEIÇÃO HOLTZ-PROF.",
     "city": "ITAPETININGA",
     "bairro": "DISTRITO DO GRAMADINHO",
@@ -3942,7 +4246,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-123",
+    "id": "school-ee-juvenal-paiva-pereira-prof-itapetininga",
     "school": "EE JUVENAL PAIVA PEREIRA-PROF.",
     "city": "ITAPETININGA",
     "bairro": "TUPY",
@@ -3963,7 +4267,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-124",
+    "id": "school-ee-major-fonseca-itapetininga",
     "school": "EE MAJOR FONSECA",
     "city": "ITAPETININGA",
     "bairro": "CENTRO",
@@ -3984,7 +4288,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-125",
+    "id": "school-ee-peixoto-gomide-itapetininga",
     "school": "EE PEIXOTO GOMIDE",
     "city": "ITAPETININGA",
     "bairro": "CENTRO",
@@ -4005,7 +4309,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-126",
+    "id": "school-ee-sebastião-pinto-prof-itapetininga",
     "school": "EE SEBASTIÃO PINTO-PROF.",
     "city": "ITAPETININGA",
     "bairro": "VILA SANTANA",
@@ -4026,7 +4330,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-127",
+    "id": "school-ee-sebastião-villaça-prof-itapetininga",
     "school": "EE SEBASTIÃO VILLAÇA-PROF.",
     "city": "ITAPETININGA",
     "bairro": "VILA RIO BRANCO",
@@ -4047,7 +4351,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-128",
+    "id": "school-ee-virgílio-silveira-prof-itapetininga",
     "school": "EE VIRGÍLIO SILVEIRA-PROF.",
     "city": "ITAPETININGA",
     "bairro": "DISTRITO DO RECHAN",
@@ -4068,7 +4372,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-129",
+    "id": "school-emef-adalberto-christo-das-dores-prof-itapetininga",
     "school": "EMEF ADALBERTO CHRISTO DAS DORES-PROF.",
     "city": "ITAPETININGA",
     "bairro": "CENTRO",
@@ -4089,7 +4393,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-130",
+    "id": "school-emef-apparecida-myrthes-de-mello-moraes-itapetininga",
     "school": "EMEF APPARECIDA MYRTHES DE MELLO MORAES",
     "city": "ITAPETININGA",
     "bairro": "VILA REIS",
@@ -4110,7 +4414,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-131",
+    "id": "school-emef-jandyra-vieira-marcondes-profª-itapetininga",
     "school": "EMEF JANDYRA VIEIRA MARCONDES-PROF.ª",
     "city": "ITAPETININGA",
     "bairro": "CENTRO",
@@ -4131,7 +4435,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-132",
+    "id": "school-e-e-presidente-arthur-da-silva-bernardes-cerquilho",
     "school": "E E PRESIDENTE ARTHUR DA SILVA BERNARDES",
     "city": "CERQUILHO",
     "bairro": "CENTRO",
@@ -4152,7 +4456,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-133",
+    "id": "school-e-e-profª-victoria-marcon-bellucci-cerquilho",
     "school": "E E PROFª VICTORIA MARCON BELLUCCI",
     "city": "CERQUILHO",
     "bairro": "JARDIM NOVA CERQUILHO",
@@ -4173,7 +4477,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-134",
+    "id": "school-e-m-e-f-luigi-luvizotto-cerquilho",
     "school": "E M E F LUIGI LUVIZOTTO",
     "city": "CERQUILHO",
     "bairro": "JARDIM SAO LUIZ",
@@ -4194,7 +4498,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-135",
+    "id": "school-e-m-e-f-luiza-gaiotto-corradi-cerquilho",
     "school": "E M E F LUIZA GAIOTTO CORRADI",
     "city": "CERQUILHO",
     "bairro": "CIDADE JARDIM",
@@ -4215,7 +4519,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-136",
+    "id": "school-e-m-e-f-padre-júlio-holtz-cerquilho",
     "school": "E M E F PADRE JÚLIO HOLTZ",
     "city": "CERQUILHO",
     "bairro": "JARDIM NOVA CERQUILHO",
@@ -4236,7 +4540,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-137",
+    "id": "school-e-m-e-f-profª-adelaide-tozzi-cerquilho",
     "school": "E M E F PROFª ADELAIDE TOZZI",
     "city": "CERQUILHO",
     "bairro": "RESIDENCIAL SEBASTIANI",
@@ -4257,7 +4561,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-138",
+    "id": "school-e-m-e-f-profª-lavínia-rodrigues-sanson-cerquilho",
     "school": "E M E F PROFª LAVÍNIA RODRIGUES SANSON",
     "city": "CERQUILHO",
     "bairro": "VILA NOSSA SENHORA DE LOURDES",
@@ -4278,7 +4582,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-139",
+    "id": "school-e-m-e-f-profª-lázara-augusta-cardia-sabatini-cerquilho",
     "school": "E M E F PROFª LÁZARA AUGUSTA CARDIA SABATINI",
     "city": "CERQUILHO",
     "bairro": "RESIDENCIAL ALIANCA",
@@ -4299,7 +4603,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-140",
+    "id": "school-e-m-e-f-profª-marina-bordenali-pilotto-gaiotto-cerquilho",
     "school": "E M E F PROFª MARINA BORDENALI PILOTTO GAIOTTO",
     "city": "CERQUILHO",
     "bairro": "JARDIM NOVA CERQUILHO",
@@ -4320,7 +4624,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-141",
+    "id": "school-e-m-e-f-profª-yolanda-biagioni-camargo-cerquilho",
     "school": "E M E F PROFª YOLANDA BIAGIONI CAMARGO",
     "city": "CERQUILHO",
     "bairro": "VILA SAO JOSE",
@@ -4341,7 +4645,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-142",
+    "id": "school-e-m-e-f-profº-artur-luiz-gayotto-cerquilho",
     "school": "E M E F PROFº ARTUR LUIZ GAYOTTO",
     "city": "CERQUILHO",
     "bairro": "RESIDENCIAL DI NAPOLI I",
@@ -4362,7 +4666,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-143",
+    "id": "school-e-m-e-f-profº-joão-toledo-cerquilho",
     "school": "E M E F PROFº JOÃO TOLEDO",
     "city": "CERQUILHO",
     "bairro": "CENTRO",
@@ -4383,7 +4687,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-144",
+    "id": "school-e-m-e-i-i-ondina-módolo-doriguello-cerquilho",
     "school": "E M E I I ONDINA MÓDOLO DORIGUELLO",
     "city": "CERQUILHO",
     "bairro": "JARDIM ITALIA",
@@ -4404,7 +4708,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-145",
+    "id": "school-e-m-e-i-i-padre-artur-silveira-cerquilho",
     "school": "E M E I I PADRE ARTUR SILVEIRA",
     "city": "CERQUILHO",
     "bairro": "CENTRO",
@@ -4425,7 +4729,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-146",
+    "id": "school-e-m-e-i-josephina-modanesi-grando-cerquilho",
     "school": "E M E I JOSEPHINA MODANESI GRANDO",
     "city": "CERQUILHO",
     "bairro": "PARQUE DAS ARVORES",
@@ -4446,7 +4750,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-147",
+    "id": "school-e-m-e-i-machado-de-assis-cerquilho",
     "school": "E M E I MACHADO DE ASSIS",
     "city": "CERQUILHO",
     "bairro": "CECAP",
@@ -4467,7 +4771,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-148",
+    "id": "school-e-m-e-i-monteiro-lobato-cerquilho",
     "school": "E M E I MONTEIRO LOBATO",
     "city": "CERQUILHO",
     "bairro": "CENTRO",
@@ -4488,7 +4792,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-149",
+    "id": "school-e-t-e-c-paula-souza-cerquilho",
     "school": "E T E C PAULA SOUZA",
     "city": "CERQUILHO",
     "bairro": "JARDIM SAO FRANCISCO I",
@@ -4509,7 +4813,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-150",
+    "id": "school-sesi-cerquilho",
     "school": "SESI",
     "city": "CERQUILHO",
     "bairro": "SÃO FRANCISCO",
@@ -4530,7 +4834,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-151",
+    "id": "school-e-e-aristeu-vasconcelos-leite-cesário-lange",
     "school": "E E ARISTEU VASCONCELOS LEITE",
     "city": "CESÁRIO LANGE",
     "bairro": "CENTRO",
@@ -4551,7 +4855,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-152",
+    "id": "school-e-m-e-f-e-i-deputado-orlando-iazetti-cesário-lange",
     "school": "E M E F E I DEPUTADO ORLANDO IAZETTI",
     "city": "CESÁRIO LANGE",
     "bairro": "DISTRITO DA FAZENDA VELHA",
@@ -4572,7 +4876,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-153",
+    "id": "school-e-m-e-f-honório-roque-de-miranda-torres-cesário-lange",
     "school": "E M E F HONÓRIO ROQUE DE MIRANDA TORRES",
     "city": "CESÁRIO LANGE",
     "bairro": "VILA BRASIL",
@@ -4593,7 +4897,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-154",
+    "id": "school-e-m-e-f-natan-pires-da-silva-cesário-lange",
     "school": "E M E F NATAN PIRES DA SILVA",
     "city": "CESÁRIO LANGE",
     "bairro": "VILA NOVA",
@@ -4614,7 +4918,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-155",
+    "id": "school-e-m-e-f-profª-sônia-maria-de-campos-sperandio-cesário-lange",
     "school": "E M E F PROFª SÔNIA MARIA DE CAMPOS SPERANDIO",
     "city": "CESÁRIO LANGE",
     "bairro": "TORNINOS",
@@ -4635,7 +4939,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-156",
+    "id": "school-e-m-e-f-profº-francisco-mendes-de-almeida-cesário-lange",
     "school": "E M E F PROFº FRANCISCO MENDES DE ALMEIDA",
     "city": "CESÁRIO LANGE",
     "bairro": "CENTRO",
@@ -4656,7 +4960,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-157",
+    "id": "school-e-m-e-b-joaquim-cyrillo-da-silva-cesário-lange",
     "school": "E M E B JOAQUIM CYRILLO DA SILVA",
     "city": "CESÁRIO LANGE",
     "bairro": "CENTRO",
@@ -4677,7 +4981,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-158",
+    "id": "school-e-m-e-b-prof-maria-antonia-de-miranda-reis-cesário-lange",
     "school": "E M E B PROF. MARIA ANTONIA DE MIRANDA REIS",
     "city": "CESÁRIO LANGE",
     "bairro": "RESIDENCIAL DOM LAZARO",
@@ -4698,7 +5002,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-159",
+    "id": "school-centro-educacional-sesi-boituva",
     "school": "CENTRO EDUCACIONAL (SESI)",
     "city": "BOITUVA",
     "bairro": "BAIRRO PAU D'ALHO",
@@ -4719,7 +5023,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-160",
+    "id": "school-ee-alferes-mario-pedro-vercellino-boituva",
     "school": "EE ALFERES MARIO PEDRO VERCELLINO",
     "city": "BOITUVA",
     "bairro": "VILA GINASIAL",
@@ -4740,7 +5044,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-161",
+    "id": "school-emef-coronel-jose-campos-de-arruda-botelho-boituva",
     "school": "EMEF CORONEL JOSE CAMPOS DE ARRUDA BOTELHO",
     "city": "BOITUVA",
     "bairro": "CENTRO",
@@ -4761,7 +5065,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-162",
+    "id": "school-emef-hélio-zacharias-boituva",
     "school": "EMEF HÉLIO ZACHARIAS",
     "city": "BOITUVA",
     "bairro": "PARQUE RESIDENCIAL ESPLANADA",
@@ -4782,7 +5086,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-163",
+    "id": "school-emef-professor-joão-pastre-boituva",
     "school": "EMEF PROFESSOR JOÃO PASTRE",
     "city": "BOITUVA",
     "bairro": "CIDADE JARDIM",
@@ -4803,7 +5107,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-164",
+    "id": "school-emef-professor-wanderley-rosa-da-silva-boituva",
     "school": "EMEF PROFESSOR WANDERLEY ROSA DA SILVA",
     "city": "BOITUVA",
     "bairro": "JARDIM SAO PAULO",
@@ -4824,7 +5128,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-165",
+    "id": "school-emef-professora-branca-selas-agostinho-boituva",
     "school": "EMEF PROFESSORA BRANCA SELAS AGOSTINHO",
     "city": "BOITUVA",
     "bairro": "JARDIM ANTONIO VESTENA MOSCHIONI",
@@ -4845,7 +5149,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-166",
+    "id": "school-emef-professora-elza-brigida-ferriello-malatrasi-boituva",
     "school": "EMEF PROFESSORA ELZA BRIGIDA FERRIELLO MALATRASI",
     "city": "BOITUVA",
     "bairro": "VILA GINASIAL",
@@ -4866,7 +5170,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-167",
+    "id": "school-emef-professora-esmeralda-bertolli-labronici-boituva",
     "school": "EMEF PROFESSORA ESMERALDA BERTOLLI LABRONICI",
     "city": "BOITUVA",
     "bairro": "RESIDENCIAL PRIMO",
@@ -4887,7 +5191,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-168",
+    "id": "school-emei-professora-célia-lourdes-vercellino-boituva",
     "school": "EMEI PROFESSORA CÉLIA LOURDES VERCELLINO",
     "city": "BOITUVA",
     "bairro": "CENTRO",
@@ -4908,7 +5212,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-169",
+    "id": "school-emeief-professora-maria-josé-vianna-boituva",
     "school": "EMEIEF PROFESSORA MARIA JOSÉ VIANNA",
     "city": "BOITUVA",
     "bairro": "PARQUE NOSSA SENHORA DAS GRACAS",
@@ -4929,7 +5233,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-170",
+    "id": "school-emeif-professor-olavo-lázaro-munhoz-soares-boituva",
     "school": "EMEIF PROFESSOR OLAVO LÁZARO MUNHOZ SOARES",
     "city": "BOITUVA",
     "bairro": "RESIDENCIAL DE LORENZI",
@@ -4950,7 +5254,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-171",
+    "id": "school-em-antonio-modolo-boituva",
     "school": "EM ANTONIO MODOLO",
     "city": "BOITUVA",
     "bairro": "RECANTO MARAVILHA II",
@@ -4971,7 +5275,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-172",
+    "id": "school-emeif-professora-eney-de-oliveira-moraes-campos-boituva",
     "school": "EMEIF PROFESSORA ENEY DE OLIVEIRA MORAES CAMPOS",
     "city": "BOITUVA",
     "bairro": "PARQUE RES.NOVO MUNDO",
@@ -4992,7 +5296,7 @@ export const INITIAL_SCHOOLS: SchoolItem[] = [
     }
   },
   {
-    "id": "school-173",
+    "id": "school-etec-vereador-valdivino-antonio-marcusso-boituva",
     "school": "ETEC \"VEREADOR VALDIVINO ANTONIO MARCUSSO\"",
     "city": "BOITUVA",
     "bairro": "CENTRO",

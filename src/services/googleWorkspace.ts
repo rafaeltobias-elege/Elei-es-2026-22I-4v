@@ -724,11 +724,17 @@ export function parseFixedStaffSheet(rows: string[][], tabContext?: string): Sch
         continue;
       }
 
+      // Never treat shift/time intervals (e.g. "06h45 - 12h45", "13h ao término") as RE
+      const isShiftVal = /[hH:]|termino|término|turno/i.test(val) || val.includes(' - ') || val.includes(' às ') || val.includes(' as ');
+      if (isShiftVal) {
+        continue;
+      }
+
       const clean = cleanDisplayRe(val);
       const digitsOnly = clean.replace(/[^0-9]/g, '');
       if (
-        /^\d{5,8}[-]?[0-9A-Za-z]?$/.test(clean) ||
-        (digitsOnly.length >= 5 && digitsOnly.length <= 8 && val.length <= 14)
+        (/^\d{5,8}[-]?[0-9A-Za-z]?$/.test(clean) && !val.includes(' ') && !val.includes('/')) ||
+        (digitsOnly.length >= 5 && digitsOnly.length <= 8 && val.length <= 11 && !val.includes(' '))
       ) {
         reCount++;
       }
@@ -839,12 +845,18 @@ export function parseFixedStaffSheet(rows: string[][], tabContext?: string): Sch
       continue;
     }
 
-    // RE check: Never match address or district as RE
+    // Shift/Time check: Never match shift or hours as RE
+    const isShiftOrTimeHeader = /\b(?:TURNO|HORA|HORARIO|HOR[AÁ]RIO|PERIODO|PER[IÍ]ODO)\b/i.test(h);
+    if (isShiftOrTimeHeader) {
+      continue;
+    }
+
+    // RE check: Never match address, shift or district as RE
     const isReHeader =
       /\b(?:RE|R\.?E\.?|REGISTRO(?:\s*ESTATISTICO)?)\b/i.test(h) &&
-      !/\b(?:ENDERECO|BAIRRO|REGIAO|RESPONSAVEL|SECRETARIA|REFERENCIA|TRE|DIRETORIA|SETORES|CIDADE|MUNICIPIO)\b/i.test(h);
+      !/\b(?:TURNO|HORA|HORARIO|HOR[AÁ]RIO|PERIODO|ENDERECO|BAIRRO|REGIAO|RESPONSAVEL|SECRETARIA|REFERENCIA|TRE|DIRETORIA|SETORES|CIDADE|MUNICIPIO)\b/i.test(h);
 
-    if ((isReHeader && stats.reRatio >= 0.2) || stats.reRatio >= 0.4) {
+    if ((isReHeader && stats.reRatio >= 0.15) || (!isShiftOrTimeHeader && stats.reRatio >= 0.4)) {
       reCandidateCols.push(c);
       continue;
     }
