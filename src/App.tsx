@@ -807,14 +807,43 @@ export default function App() {
     }
   };
 
-  // No automatic Sheets polling: devices read schools/staff from Firestore only.
-  // The P/3 imports from the spreadsheets manually (header sync button / config modal),
-  // which is the single writer of the schools and staff collections.
+  // Atualização automática em segundo plano das planilhas na inicialização do app
+  // Garante que qualquer policial ou oficial que abrir o app (mesmo sem senha de supervisão)
+  // tenha a escala e os postos mais recentes atualizados automaticamente.
+  useEffect(() => {
+    let isMounted = true;
+    const autoRefreshTimer = setTimeout(async () => {
+      if (!isMounted) return;
+      if (!sheetsConfig.fixedStaffSheetId) return;
+
+      try {
+        console.log('[AutoSync] Verificando e atualizando planilhas em segundo plano...');
+        await handleLoadFromSheets(
+          sheetsConfig.fixedStaffSheetId,
+          sheetsConfig.motorizedStaffSheetId,
+          sheetsConfig.coordinatesSheetId,
+          undefined,
+          false
+        );
+        console.log('[AutoSync] Planilhas sincronizadas em segundo plano!');
+      } catch (err) {
+        console.warn('[AutoSync] Atualização automática de planilhas:', err);
+      }
+    }, 1200);
+
+    return () => {
+      isMounted = false;
+      clearTimeout(autoRefreshTimer);
+    };
+  }, [sheetsConfig.fixedStaffSheetId, sheetsConfig.motorizedStaffSheetId, sheetsConfig.coordinatesSheetId]);
 
   // Search & Officer Resolution logic
   const resolveOfficerCandidate = useCallback((queryToSearch: string) => {
     const q = queryToSearch.trim();
     if (!q) return null;
+
+    const effectiveStaff = staffList && staffList.length > 0 ? staffList : INITIAL_STAFF;
+    const effectiveSchools = schoolList && schoolList.length > 0 ? schoolList : INITIAL_SCHOOLS;
 
     // Helper to check if role is non-ronda support
     const isSupportRole = (fn: string | undefined) => {
@@ -876,7 +905,7 @@ export default function App() {
       // Resolve phone from officer or lookup in staffList / INITIAL_STAFF / schoolList (Coluna G)
       const resolvedPhone = resolvePhoneForRe(officer.re, officer.phone);
 
-      const matchStaff = staffList.find(
+      const matchStaff = effectiveStaff.find(
         (m) =>
           matchesExactRe(m.re, officer.re) ||
           (officer.name && normalizeText(m.name) === normalizeText(officer.name))
@@ -913,7 +942,7 @@ export default function App() {
         officer: SchoolOfficer;
       }> = [];
 
-      for (const s of schoolList) {
+      for (const s of effectiveSchools) {
         if (isRondaRoleOrSchool(s.school, s.address || s.bairro)) continue;
 
         const amOfficers = getSchoolAmOfficers(s);
@@ -961,7 +990,7 @@ export default function App() {
     };
 
     // Priority 1: Exact RE match across motorized staff, coordination and schools
-    const exactStaff = staffList.find((m) => matchesExactRe(m.re, q));
+    const exactStaff = effectiveStaff.find((m) => matchesExactRe(m.re, q));
     if (exactStaff) {
       const isTarde = exactStaff.shiftRaw?.toLowerCase().includes('tarde');
       const isTrueRonda = isRondaRoleOrSchool(exactStaff.function);
@@ -996,7 +1025,7 @@ export default function App() {
     }
 
     // 1.2 Schools: Morning officers (AM Turno Manhã) - checking all assigned officers per school
-    for (const s of schoolList) {
+    for (const s of effectiveSchools) {
       const amOfficers = getSchoolAmOfficers(s);
       const matchedOff = amOfficers.find((off) => matchesExactRe(off.re, q));
       if (matchedOff) {
@@ -1005,7 +1034,7 @@ export default function App() {
         }
         const schoolPhone = resolvePhoneForRe(matchedOff.re, matchedOff.phone);
         const officerWithPhone = { ...matchedOff, phone: schoolPhone || matchedOff.phone };
-        const matchStaff = staffList.find(
+        const matchStaff = effectiveStaff.find(
           (m) =>
             matchesExactRe(m.re, matchedOff.re) ||
             (matchedOff.name && normalizeText(m.name) === normalizeText(matchedOff.name))
@@ -1026,7 +1055,7 @@ export default function App() {
     }
 
     // 1.3 Schools: Afternoon officers (PM Turno Tarde) - checking all assigned officers per school
-    for (const s of schoolList) {
+    for (const s of effectiveSchools) {
       const pmOfficers = getSchoolPmOfficers(s);
       const matchedOff = pmOfficers.find((off) => matchesExactRe(off.re, q));
       if (matchedOff) {
@@ -1035,7 +1064,7 @@ export default function App() {
         }
         const schoolPhone = resolvePhoneForRe(matchedOff.re, matchedOff.phone);
         const officerWithPhone = { ...matchedOff, phone: schoolPhone || matchedOff.phone };
-        const matchStaff = staffList.find(
+        const matchStaff = effectiveStaff.find(
           (m) =>
             matchesExactRe(m.re, matchedOff.re) ||
             (matchedOff.name && normalizeText(m.name) === normalizeText(matchedOff.name))
@@ -1056,7 +1085,7 @@ export default function App() {
     }
 
     // Priority 2: General query match (Name or partial RE)
-    const foundStaff = staffList.find((m) => matchesQuery(m.re, m.name, q));
+    const foundStaff = effectiveStaff.find((m) => matchesQuery(m.re, m.name, q));
     if (foundStaff) {
       const isTarde = foundStaff.shiftRaw?.toLowerCase().includes('tarde');
       const isTrueRonda = isRondaRoleOrSchool(foundStaff.function);
@@ -1090,7 +1119,7 @@ export default function App() {
       };
     }
 
-    for (const s of schoolList) {
+    for (const s of effectiveSchools) {
       const amOfficers = getSchoolAmOfficers(s);
       const matchedOff = amOfficers.find((off) => matchesQuery(off.re, off.name, q));
       if (matchedOff) {
@@ -1099,7 +1128,7 @@ export default function App() {
         }
         const schoolPhone = resolvePhoneForRe(matchedOff.re, matchedOff.phone);
         const officerWithPhone = { ...matchedOff, phone: schoolPhone || matchedOff.phone };
-        const matchStaff = staffList.find(
+        const matchStaff = effectiveStaff.find(
           (m) =>
             matchesExactRe(m.re, matchedOff.re) ||
             (matchedOff.name && normalizeText(m.name) === normalizeText(matchedOff.name))
@@ -1119,7 +1148,7 @@ export default function App() {
       }
     }
 
-    for (const s of schoolList) {
+    for (const s of effectiveSchools) {
       const pmOfficers = getSchoolPmOfficers(s);
       const matchedOff = pmOfficers.find((off) => matchesQuery(off.re, off.name, q));
       if (matchedOff) {
@@ -1128,7 +1157,7 @@ export default function App() {
         }
         const schoolPhone = resolvePhoneForRe(matchedOff.re, matchedOff.phone);
         const officerWithPhone = { ...matchedOff, phone: schoolPhone || matchedOff.phone };
-        const matchStaff = staffList.find(
+        const matchStaff = effectiveStaff.find(
           (m) =>
             matchesExactRe(m.re, matchedOff.re) ||
             (matchedOff.name && normalizeText(m.name) === normalizeText(matchedOff.name))
