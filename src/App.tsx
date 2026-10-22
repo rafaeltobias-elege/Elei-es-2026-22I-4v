@@ -92,7 +92,7 @@ import { ConfirmIdentityModal } from './components/ConfirmIdentityModal';
 import { JustificationModal } from './components/JustificationModal';
 import { SupervisorAuthModal } from './components/SupervisorAuthModal';
 import { UnbindDeviceModal } from './components/UnbindDeviceModal';
-import { computeShiftKpis, ShiftKpiSummary, hasVerifiedLocation, isOutsideRadius, isSchoolFullDay, isRondaRoleOrSchool, isGcmSchool, getSchoolAmOfficers, getSchoolPmOfficers, isGcmOfficer } from './utils/checkinStatus';
+import { computeShiftKpis, ShiftKpiSummary, isCommandOrSupervisionRole, hasVerifiedLocation, isOutsideRadius, isSchoolFullDay, isRondaRoleOrSchool, isGcmSchool, getSchoolAmOfficers, getSchoolPmOfficers, isGcmOfficer } from './utils/checkinStatus';
 import { filterSchoolsByJurisdiction } from './utils/jurisdiction';
 import { resolveMunicipality, BPM40_CITIES, normalizeCityName } from './utils/municipality';
 import { findSchoolCoordinates, SchoolGeoEntry, registerDynamicCoordinates, matchSchoolWithGeoEntries } from './data/schoolCoordinates';
@@ -136,8 +136,10 @@ export function isRealStaffMember(item: StaffMember): boolean {
 
 const EMPTY_KPIS: ShiftKpiSummary = {
   totalSchools: 0,
+  morningExpectedSchools: 0,
   morningDone: 0,
   morningPending: 0,
+  afternoonExpectedSchools: 0,
   afternoonDone: 0,
   afternoonPending: 0,
   fullDayCount: 0,
@@ -818,41 +820,38 @@ export default function App() {
 
   // Atualização automática em segundo plano das planilhas na inicialização e periodicamente
   // Garante que qualquer alteração ou nova escala preenchida no Google Sheets seja
-  // refletida no aplicativo automaticamente, sem necessidade de senha nem intervenção manual.
+  // refletida no aplicativo automaticamente para todos os policiais, sem necessidade de senha nem intervenção manual.
   useEffect(() => {
     let isMounted = true;
 
     const runSync = async () => {
       if (!isMounted) return;
-      if (!sheetsConfig.fixedStaffSheetId) return;
 
       try {
-        console.log('[AutoSync] Verificando e atualizando planilhas em segundo plano...');
-        await handleLoadFromSheets(
-          sheetsConfig.fixedStaffSheetId,
-          sheetsConfig.motorizedStaffSheetId,
-          sheetsConfig.coordinatesSheetId,
-          undefined,
-          false
-        );
-        console.log('[AutoSync] Planilhas sincronizadas em segundo plano!');
+        const res = await fetch('/api/sheets/auto-sync', { method: 'POST' });
+        if (res.ok) {
+          const data = await res.json();
+          if (data && data.success && data.schoolsCount >= 50) {
+            console.info(`[AutoSync] Sincronização automática ativa: ${data.schoolsCount} postos e ${data.staffCount} militares.`);
+          }
+        }
       } catch (err) {
-        console.warn('[AutoSync] Atualização automática de planilhas:', err);
+        console.warn('[AutoSync] Erro na requisição de auto-sync:', err);
       }
     };
 
-    // 1. Atualização inicial rápida (1.2s após abrir o app)
-    const initialTimer = setTimeout(runSync, 1200);
+    // 1. Atualização inicial rápida (800ms após abrir o app)
+    const initialTimer = setTimeout(runSync, 800);
 
-    // 2. Atualização periódica a cada 5 minutos enquanto o app estiver aberto na tela
-    const periodicInterval = setInterval(runSync, 5 * 60 * 1000);
+    // 2. Atualização periódica a cada 3 minutos enquanto o app estiver aberto na tela
+    const periodicInterval = setInterval(runSync, 3 * 60 * 1000);
 
     return () => {
       isMounted = false;
       clearTimeout(initialTimer);
       clearInterval(periodicInterval);
     };
-  }, [sheetsConfig.fixedStaffSheetId, sheetsConfig.motorizedStaffSheetId, sheetsConfig.coordinatesSheetId]);
+  }, []);
 
   // Search & Officer Resolution logic
   const resolveOfficerCandidate = useCallback((queryToSearch: string) => {
@@ -1765,12 +1764,19 @@ export default function App() {
     return schoolList.filter((s) => !isRondaRoleOrSchool(s.school, s.address || s.bairro) && !isGcmSchool(s));
   }, [schoolList]);
 
-  // KPIs Calculations — only the supervisor panel shows them; computing on every officer
-  // device re-ran the full schools × check-ins match on every check-in in the battalion.
+  const isCommanderOrSupervisor = useMemo(() => {
+    return (
+      isSupervisorMode ||
+      isCommandOrSupervisionRole(selectedOfficerMatch) ||
+      (deviceBinding ? isCommandOrSupervisionRole({ rank: deviceBinding.boundRank, function: deviceBinding.boundName }) : false)
+    );
+  }, [isSupervisorMode, selectedOfficerMatch, deviceBinding]);
+
+  // KPIs Calculations — computed for supervisor panel and all commanders/supervisors
   const kpiSummary = useMemo(() => {
-    if (!isSupervisorMode) return EMPTY_KPIS;
+    if (!isCommanderOrSupervisor) return EMPTY_KPIS;
     return computeShiftKpis(fixedSchoolList, checkIns);
-  }, [isSupervisorMode, fixedSchoolList, checkIns]);
+  }, [isCommanderOrSupervisor, fixedSchoolList, checkIns]);
 
   const totalSchools = kpiSummary.totalSchools;
   const totalRondas = rondas.length;
@@ -1877,13 +1883,20 @@ export default function App() {
           <div className="w-full min-w-0">
             <OfficerDetailView
               officer={selectedOfficerMatch}
+              kpiSummary={kpiSummary}
               checkInRecord={currentOfficerCheckIn}
               rondasMade={currentOfficerRondas}
               allRondas={rondas}
               onBack={handleClearSearch}
               isIndividualRestrictedMode={!isSupervisorMode}
               onLogout={handleLogoutDevice}
-              onOpenSupervisorMode={() => setIsSupervisorModalOpen(true)}
+              onOpenSupervisorMode={() => {
+                if (isCommandOrSupervisionRole(selectedOfficerMatch)) {
+                  handleSetSupervisorMode(true);
+                } else {
+                  setIsSupervisorModalOpen(true);
+                }
+              }}
               deviceBinding={deviceBinding}
               onDeleteCheckIn={handleDeleteCheckIn}
               onDeleteRonda={handleDeleteRonda}
@@ -2015,13 +2028,17 @@ export default function App() {
               <div className="w-full min-w-0">
                 <KpiGrid
                   totalSchools={kpiSummary.totalSchools}
+                  morningExpectedSchools={kpiSummary.morningExpectedSchools}
                   morningDone={kpiSummary.morningDone}
                   morningPending={kpiSummary.morningPending}
+                  afternoonExpectedSchools={kpiSummary.afternoonExpectedSchools}
                   afternoonDone={kpiSummary.afternoonDone}
                   afternoonPending={kpiSummary.afternoonPending}
                   totalRondas={totalRondas}
                   fullDayCount={kpiSummary.fullDayCount}
                   mediaDeliveredCount={kpiSummary.mediaDeliveredCount}
+                  gcmMorningCount={kpiSummary.gcmMorningCount}
+                  gcmAfternoonCount={kpiSummary.gcmAfternoonCount}
                   onKpiClick={(type) => setActiveKpiModal(type)}
                   onRondasClick={() => setSupervisorTab('rondas')}
                 />

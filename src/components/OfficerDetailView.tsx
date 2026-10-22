@@ -26,7 +26,7 @@ import {
 import { StaffMember, SchoolItem, CheckInRecord, RondaRecord, DeviceBinding, SchoolOfficer } from '../types';
 import { normalizeText, matchesExactRe, normalizeRe } from '../utils/normalize';
 import { filterSchoolsByJurisdiction } from '../utils/jurisdiction';
-import { isRondaRoleOrSchool, getSchoolAmOfficers, getSchoolPmOfficers, findOfficerCheckIn, isGcmOfficer } from '../utils/checkinStatus';
+import { isRondaRoleOrSchool, getSchoolAmOfficers, getSchoolPmOfficers, findOfficerCheckIn, isGcmOfficer, isCommandOrSupervisionRole, ShiftKpiSummary } from '../utils/checkinStatus';
 import { INITIAL_STAFF } from '../data/initialData';
 import { PendingSchoolsTable } from './PendingSchoolsTable';
 import { SectorRondasTab } from './SectorRondasTab';
@@ -69,6 +69,7 @@ interface OfficerDetailViewProps {
   onSearchByRe?: (re: string) => void;
   activeTab?: 'escolas' | 'rondas';
   onTabChange?: (tab: 'escolas' | 'rondas') => void;
+  kpiSummary?: ShiftKpiSummary;
 }
 
 export const OfficerDetailView: React.FC<OfficerDetailViewProps> = ({
@@ -88,6 +89,7 @@ export const OfficerDetailView: React.FC<OfficerDetailViewProps> = ({
   allSchools = [],
   staffList = [],
   allCheckIns = [],
+  kpiSummary,
   onSelectSchoolForCheckIn,
   onSearchByRe,
   onDeleteRonda,
@@ -435,12 +437,23 @@ export const OfficerDetailView: React.FC<OfficerDetailViewProps> = ({
       ? 'Efetivo Local (Ponto Fixo)'
       : 'Efetivo Operacional');
 
+  const isCommander = useMemo(() => {
+    return (
+      isCommandOrSupervisionRole(officer) ||
+      (resolvedStaff ? isCommandOrSupervisionRole({ staff: resolvedStaff }) : false)
+    );
+  }, [officer, resolvedStaff]);
+
+  const [showAllBattalionSchools, setShowAllBattalionSchools] = useState<boolean>(false);
+
   // Sector schools for Level 3 inspection
   const officerJurisdictionLocal = staff?.local || (schoolItem ? `${schoolItem.opm || ''} · ${schoolItem.city || ''}` : '');
   const sectorSchools = useMemo(() => {
     if (!showRondaSection || !allSchools || allSchools.length === 0) return [];
-    return filterSchoolsByJurisdiction(allSchools, officerJurisdictionLocal, staff?.function);
-  }, [showRondaSection, allSchools, officerJurisdictionLocal, staff?.function]);
+    if (isCommander || showAllBattalionSchools) return allSchools;
+    const filtered = filterSchoolsByJurisdiction(allSchools, officerJurisdictionLocal, staff?.function);
+    return filtered.length > 0 ? filtered : allSchools;
+  }, [showRondaSection, allSchools, officerJurisdictionLocal, staff?.function, isCommander, showAllBattalionSchools]);
 
   // Shift Schedule Formatting (shows exact hours e.g. "06h às 13h", "13h ao término", etc.)
   const isMorningShift =
@@ -663,6 +676,7 @@ export const OfficerDetailView: React.FC<OfficerDetailViewProps> = ({
     return { amList, pmList, total: amList.length + pmList.length };
   };
 
+
   return (
     <div className={`flex flex-col gap-3.5 sm:gap-6 mt-2 sm:mt-6 w-full min-w-0 ${showRondaSection ? 'pb-20 md:pb-6' : 'pb-6'}`}>
       {/* Top back navigation */}
@@ -693,6 +707,152 @@ export const OfficerDetailView: React.FC<OfficerDetailViewProps> = ({
           )}
         </div>
       </div>
+
+      {/* PAINEL TÁTICO DE COMANDO & SUPERVISÃO (Visível para Comandante, Subcomandante, CoordOp, Supervisores e CGPs) */}
+      {isCommander && kpiSummary && kpiSummary.totalSchools > 0 && (
+        <div className="bg-gradient-to-r from-[#0F2B48] via-slate-900 to-[#0F2B48] text-white border-2 border-amber-400/70 rounded-xl sm:rounded-2xl p-4 sm:p-5 shadow-lg space-y-4 animate-in fade-in">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-white/10">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-amber-400/20 border border-amber-400/40 flex items-center justify-center shrink-0">
+                <ShieldCheck className="w-5 h-5 text-amber-300" />
+              </div>
+              <div>
+                <div className="flex items-center gap-2 flex-wrap">
+                  <span className="text-[10px] font-black uppercase tracking-wider bg-amber-400 text-slate-950 px-2 py-0.5 rounded shadow-2xs">
+                    Comando & Supervisão
+                  </span>
+                  <span className="text-xs font-bold text-slate-300">
+                    22º BPM/I · CPI-7
+                  </span>
+                </div>
+                <h3 className="text-sm sm:text-base font-black text-white mt-0.5">
+                  Quadro Geral das Eleições · Efetivo PMESP
+                </h3>
+              </div>
+            </div>
+
+            {onOpenSupervisorMode && (
+              <button
+                type="button"
+                onClick={onOpenSupervisorMode}
+                className="px-3.5 py-2 bg-blue-600 hover:bg-blue-700 active:scale-[0.98] text-white text-xs font-black rounded-xl transition shadow-md flex items-center justify-center gap-2 cursor-pointer shrink-0"
+              >
+                <School className="w-4 h-4" />
+                <span>Abrir Painel Completo do P/3</span>
+              </button>
+            )}
+          </div>
+
+          {/* 4 Cards de Números do Batalhão (Manhã e Tarde) */}
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3">
+            {/* 1. Manhã Feitos */}
+            <div className="bg-white/10 backdrop-blur-xs rounded-xl p-2.5 sm:p-3 border border-white/10">
+              <div className="flex items-center justify-between text-[10px] font-bold text-emerald-300 uppercase">
+                <span>Manhã · 06h-13h</span>
+                <span className="font-mono text-xs">
+                  {kpiSummary.morningExpectedSchools > 0
+                    ? Math.round((kpiSummary.morningDone / kpiSummary.morningExpectedSchools) * 100)
+                    : 0}%
+                </span>
+              </div>
+              <div className="text-[11px] font-bold text-slate-300 mt-1">Check-ins Feitos</div>
+              <div className="flex items-baseline gap-1 mt-0.5">
+                <span className="text-xl sm:text-2xl font-black font-mono text-emerald-400">
+                  {kpiSummary.morningDone}
+                </span>
+                <span className="text-[10px] sm:text-xs text-slate-400 font-semibold">
+                  / {kpiSummary.morningExpectedSchools} postos
+                </span>
+              </div>
+            </div>
+
+            {/* 2. Manhã Pendentes */}
+            <div className="bg-white/10 backdrop-blur-xs rounded-xl p-2.5 sm:p-3 border border-white/10">
+              <div className="text-[10px] font-bold text-amber-300 uppercase">Manhã · Pendentes</div>
+              <div className="text-[11px] font-bold text-slate-300 mt-1">Aguardando Chegada</div>
+              <div className="flex items-baseline gap-1 mt-0.5">
+                <span className={`text-xl sm:text-2xl font-black font-mono ${kpiSummary.morningPending > 0 ? 'text-amber-400' : 'text-slate-400'}`}>
+                  {kpiSummary.morningPending}
+                </span>
+                <span className="text-[10px] sm:text-xs text-slate-400 font-semibold">
+                  {kpiSummary.morningPending === 0 ? '· 100% OK' : 'postos'}
+                </span>
+              </div>
+            </div>
+
+            {/* 3. Tarde Feitos */}
+            <div className="bg-white/10 backdrop-blur-xs rounded-xl p-2.5 sm:p-3 border border-white/10">
+              <div className="flex items-center justify-between text-[10px] font-bold text-sky-300 uppercase">
+                <span>Tarde · 13h-Término</span>
+                <span className="font-mono text-xs">
+                  {kpiSummary.afternoonExpectedSchools > 0
+                    ? Math.round((kpiSummary.afternoonDone / kpiSummary.afternoonExpectedSchools) * 100)
+                    : 0}%
+                </span>
+              </div>
+              <div className="text-[11px] font-bold text-slate-300 mt-1">Check-ins Feitos</div>
+              <div className="flex items-baseline gap-1 mt-0.5">
+                <span className="text-xl sm:text-2xl font-black font-mono text-sky-400">
+                  {kpiSummary.afternoonDone}
+                </span>
+                <span className="text-[10px] sm:text-xs text-slate-400 font-semibold">
+                  / {kpiSummary.afternoonExpectedSchools} postos
+                </span>
+              </div>
+            </div>
+
+            {/* 4. Tarde Pendentes */}
+            <div className="bg-white/10 backdrop-blur-xs rounded-xl p-2.5 sm:p-3 border border-white/10">
+              <div className="text-[10px] font-bold text-rose-300 uppercase">Tarde · Pendentes</div>
+              <div className="text-[11px] font-bold text-slate-300 mt-1">Aguardando Chegada</div>
+              <div className="flex items-baseline gap-1 mt-0.5">
+                <span className={`text-xl sm:text-2xl font-black font-mono ${kpiSummary.afternoonPending > 0 ? 'text-rose-400' : 'text-slate-400'}`}>
+                  {kpiSummary.afternoonPending}
+                </span>
+                <span className="text-[10px] sm:text-xs text-slate-400 font-semibold">
+                  {kpiSummary.afternoonPending === 0 ? '· 100% OK' : 'postos'}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* Banner de Mídias no Cartório Eleitoral para Comando */}
+          <div className="bg-purple-950/80 border border-purple-500/50 rounded-xl p-3 sm:p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-inner">
+            <div className="flex items-center gap-2.5">
+              <div className="w-9 h-9 rounded-lg bg-purple-500/30 border border-purple-400/40 flex items-center justify-center shrink-0">
+                <PackageCheck className="w-5 h-5 text-purple-200" />
+              </div>
+              <div>
+                <div className="text-xs sm:text-sm font-black text-white">
+                  Mídias & Boletins Entregues no Cartório Eleitoral
+                </div>
+                <div className="text-[10.5px] text-purple-200 mt-0.5">
+                  Desmobilização dos postos com efetivo PMESP (exclui Guarda Municipal).
+                </div>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-3 bg-black/40 border border-purple-400/30 rounded-lg px-3 py-1.5 shrink-0 self-stretch sm:self-auto justify-between sm:justify-end">
+              <div className="text-left sm:text-right">
+                <div className="text-[9.5px] uppercase font-bold text-purple-300">Mídias Entregues</div>
+                <div className="flex items-baseline gap-1">
+                  <span className="text-xl sm:text-2xl font-black font-mono text-white">
+                    {kpiSummary.mediaDeliveredCount || 0}
+                  </span>
+                  <span className="text-xs text-purple-300 font-bold">
+                    / {kpiSummary.afternoonExpectedSchools || kpiSummary.totalSchools}
+                  </span>
+                </div>
+              </div>
+              <div className="text-xs font-black font-mono px-2 py-1 bg-purple-600 text-white rounded-md shadow-2xs">
+                {(kpiSummary.afternoonExpectedSchools || kpiSummary.totalSchools) > 0
+                  ? Math.round(((kpiSummary.mediaDeliveredCount || 0) / (kpiSummary.afternoonExpectedSchools || kpiSummary.totalSchools)) * 100)
+                  : 0}%
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Se NÃO for policial com posto fixo de escola (Rondantes, Apoio, Coordenação): CARD ÚNICO E ENXUTO */}
       {!hasFixedPostCheckIn ? (
@@ -1523,21 +1683,45 @@ export const OfficerDetailView: React.FC<OfficerDetailViewProps> = ({
 
           {/* Active Tab View */}
           {effectiveActiveTab === 'escolas' ? (
-            <PendingSchoolsTable
-              schools={sectorSchools.length > 0 ? sectorSchools : allSchools}
-              checkInList={allCheckIns}
-              staffList={staffList}
-              onSelectSchoolForCheckIn={onSelectSchoolForCheckIn || (() => {})}
-              onSearchByRe={onSearchByRe || (() => {})}
-              onDeleteCheckIn={onDeleteCheckIn}
-              title={
-                normalizeText(staff?.local || '').includes('22') || !staff?.local
-                  ? 'Relação de Escolas · 22º BPM/I'
-                  : `Relação de Escolas · ${staff?.local}`
-              }
-              subtitle={`Relação de postos eleitorais sob fiscalização do seu setor (${staff?.local || '22º BPM/I'}). As escolas com check-in realizado saem automaticamente da pendência.`}
-              defaultOnlyPending={true}
-            />
+            <div className="space-y-3">
+              {!isCommander && allSchools.length > 0 && (
+                <div className="flex justify-end">
+                  <button
+                    type="button"
+                    onClick={() => setShowAllBattalionSchools(!showAllBattalionSchools)}
+                    className="text-xs font-black px-3.5 py-1.5 rounded-xl border border-slate-300 bg-white hover:bg-slate-50 text-slate-700 shadow-2xs transition flex items-center gap-1.5 cursor-pointer"
+                  >
+                    <School className="w-3.5 h-3.5 text-blue-600" />
+                    <span>
+                      {showAllBattalionSchools
+                        ? 'Voltar ao Meu Setor'
+                        : `Ver Todos os ${allSchools.length} Postos do 22º BPM/I`}
+                    </span>
+                  </button>
+                </div>
+              )}
+              <PendingSchoolsTable
+                schools={sectorSchools.length > 0 ? sectorSchools : allSchools}
+                checkInList={allCheckIns}
+                staffList={staffList}
+                onSelectSchoolForCheckIn={onSelectSchoolForCheckIn || (() => {})}
+                onSearchByRe={onSearchByRe || (() => {})}
+                onDeleteCheckIn={onDeleteCheckIn}
+                title={
+                  isCommander || showAllBattalionSchools
+                    ? 'Quadro Geral de Postos Eleitorais · 22º BPM/I'
+                    : normalizeText(staff?.local || '').includes('22') || !staff?.local
+                    ? 'Relação de Escolas · 22º BPM/I'
+                    : `Relação de Escolas · ${staff?.local}`
+                }
+                subtitle={
+                  isCommander || showAllBattalionSchools
+                    ? 'Relação completa de todos os postos eleitorais nos 13 municípios sob jurisdição do 22º BPM/I.'
+                    : `Relação de postos eleitorais sob fiscalização do seu setor (${staff?.local || '22º BPM/I'}). As escolas com check-in realizado saem automaticamente da pendência.`
+                }
+                defaultOnlyPending={true}
+              />
+            </div>
           ) : (
             <SectorRondasTab
               isSupervisorView={false}

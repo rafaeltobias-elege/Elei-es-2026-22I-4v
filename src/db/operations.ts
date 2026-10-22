@@ -437,7 +437,11 @@ export async function getSchoolsFromDb(): Promise<SchoolItem[]> {
 
 export async function saveSchoolsToDb(items: SchoolItem[], replace: boolean = true): Promise<void> {
   if (items.length === 0) return;
-  if (replace) {
+  // Safety guard: never wipe 174 schools if incoming list is a partial drop (< 50 items)
+  const isPartialDrop = items.length < 50 && memoryStore.schools.length >= 50;
+  const effectiveReplace = replace && !isPartialDrop;
+
+  if (effectiveReplace) {
     memoryStore.schools = items;
   } else {
     const map = new Map(memoryStore.schools.map((s) => [s.id, s]));
@@ -450,7 +454,7 @@ export async function saveSchoolsToDb(items: SchoolItem[], replace: boolean = tr
 
   try {
     if (isSqlHostConfigured()) {
-      if (replace) {
+      if (effectiveReplace) {
         const newIds = new Set(items.map((i) => i.id));
         const existing = await db.select().from(schools);
         const toDelete = existing.filter((e) => !newIds.has(e.id)).map((e) => e.id);

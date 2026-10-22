@@ -31,6 +31,12 @@ import {
   deleteAuditLogFromDb,
   clearRangeFromDb,
 } from './src/db/operations.ts';
+import { parseFixedStaffSheet, parseMotorizedStaffSheet, parseCoordinatesSheet } from './src/services/googleWorkspace.ts';
+import { resolveMunicipality } from './src/utils/municipality.ts';
+import { findSchoolCoordinates, matchSchoolWithGeoEntries } from './src/data/schoolCoordinates.ts';
+import { isGcmSchool } from './src/utils/checkinStatus.ts';
+import { normalizeText } from './src/utils/normalize.ts';
+import type { SchoolItem, StaffMember } from './src/types.ts';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -152,6 +158,173 @@ async function startServer() {
       console.warn('Proxy public-values error:', err);
       res.status(500).json({ error: err.message || 'Failed to fetch spreadsheet values', rows: [] });
     }
+  });
+
+  // ==========================================
+  // AUTOMATED GOOGLE SHEETS BACKGROUND SYNC
+  // ==========================================
+  async function fetchGvizTableRows(spreadsheetId: string, sheetName?: string): Promise<string[][]> {
+    try {
+      const match = spreadsheetId.match(/\/spreadsheets\/d\/([a-zA-Z0-9-_]+)/);
+      const cleanId = match ? match[1] : spreadsheetId;
+      const sheetParam = sheetName ? `&sheet=${encodeURIComponent(sheetName)}` : '';
+      const url = `https://docs.google.com/spreadsheets/d/${cleanId}/gviz/tq?tqx=out:json${sheetParam}`;
+      const response = await fetch(url, {
+        headers: {
+          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        },
+      });
+      if (!response.ok) return [];
+      const text = await response.text();
+      const jsonStart = text.indexOf('{');
+      const jsonEnd = text.lastIndexOf('}');
+      if (jsonStart === -1 || jsonEnd === -1) return [];
+      const data = JSON.parse(text.substring(jsonStart, jsonEnd + 1));
+      const table = data?.table;
+      if (!table || !table.rows) return [];
+      const rows: string[][] = [];
+      if (table.cols && table.cols.length > 0) {
+        const headerRow = table.cols.map((c: any) => (c?.label ? String(c.label) : ''));
+        if (headerRow.some((h: string) => h && h.trim().length > 0)) {
+          rows.push(headerRow);
+        }
+      }
+      for (const r of table.rows) {
+        const rowVals = (r.c || []).map((cell: any) => {
+          if (!cell) return '';
+          if (cell.f !== undefined && cell.f !== null) return String(cell.f);
+          if (cell.v !== undefined && cell.v !== null) return String(cell.v);
+          return '';
+        });
+        rows.push(rowVals);
+      }
+      return rows;
+    } catch (e) {
+      console.warn('[AutoSync Server] fetchGvizTableRows error:', e);
+      return [];
+    }
+  }
+
+  function isRealStaffMemberServer(item: any): boolean {
+    if (!item || !item.re) return false;
+    const reUpper = String(item.re).trim().toUpperCase();
+    if (reUpper.startsWith('MOT-') || reUpper.startsWith('N/D-')) return false;
+    const normName = normalizeText(item.name || '');
+    if (!normName || normName.includes('QUADRO') || normName.includes('TOTAL') || normName === 'N/D') return false;
+    return true;
+  }
+
+  async function syncGoogleSheetsDirectly(): Promise<{ success: boolean; schoolsCount: number; staffCount: number; lastSync: string }> {
+    try {
+      const FIXED_SHEET_ID = '1PYjEtFpfbXBOTsrrbxhiLUYzJSsg8AiM';
+      const MOTORIZED_SHEET_ID = '1sw3mHOAHLekMt3heclkjLrCU3j69NP0M';
+      const COORDS_SHEET_ID = '1D7GPeDrYXW0r5bbtdN0KupHy8lOR0efd';
+
+      // 1. Coordinates
+      let geoEntries: any[] = [];
+      try {
+        const coordRows = await fetchGvizTableRows(COORDS_SHEET_ID);
+        if (coordRows.length > 0) {
+          geoEntries = parseCoordinatesSheet(coordRows);
+        }
+      } catch (e) {
+        console.warn('[AutoSync Server] Coordenadas error:', e);
+      }
+
+      // 2. Fixed Schools
+      const fixedRows = await fetchGvizTableRows(FIXED_SHEET_ID);
+      if (fixedRows.length > 0) {
+        const parsedSchools = parseFixedStaffSheet(fixedRows);
+        // Guard: strictly ignore if less than 50 schools (prevents resetting to partial lists)
+        if (parsedSchools.length >= 50) {
+          const normalizedSchools: SchoolItem[] = parsedSchools.map((s) => {
+            const resolvedCity = resolveMunicipality(s.city, s.school, s.address, s.bairro, s.zone, s.opm);
+            let lat = s.lat;
+            let lng = s.lng;
+            let address = s.address;
+            let bairro = s.bairro;
+
+            if (geoEntries.length > 0) {
+              const matched = matchSchoolWithGeoEntries(s.school, resolvedCity, geoEntries);
+              if (matched) {
+                if (matched.latitude && matched.longitude) {
+                  lat = matched.latitude;
+                  lng = matched.longitude;
+                }
+                if (matched.logradouro) address = matched.logradouro;
+                if (matched.bairro) bairro = matched.bairro;
+              }
+            }
+
+            if (!lat || !lng) {
+              const geo = findSchoolCoordinates(s.school, resolvedCity);
+              if (geo && geo.lat && geo.lng) {
+                lat = geo.lat;
+                lng = geo.lng;
+                if (!address) address = geo.address;
+                if (!bairro && geo.bairro) bairro = geo.bairro;
+              }
+            }
+
+            return {
+              ...s,
+              city: resolvedCity,
+              lat,
+              lng,
+              address,
+              bairro: bairro || s.bairro
+            };
+          }).filter((s) => !isGcmSchool(s));
+
+          if (normalizedSchools.length >= 50) {
+            await saveSchoolsToDb(normalizedSchools, true);
+            console.log(`[AutoSync Server] Sincronização automática OK: ${normalizedSchools.length} postos eleitorais atualizados.`);
+          }
+        }
+      }
+
+      // 3. Motorized Staff
+      const motRows = await fetchGvizTableRows(MOTORIZED_SHEET_ID);
+      if (motRows.length > 0) {
+        const parsedStaff = parseMotorizedStaffSheet(motRows).filter(isRealStaffMemberServer);
+        if (parsedStaff.length >= 20) {
+          await saveStaffToDb(parsedStaff, true);
+          console.log(`[AutoSync Server] Sincronização automática OK: ${parsedStaff.length} policiais de apoio/motorizados atualizados.`);
+        }
+      }
+
+      const lastSync = new Date().toISOString();
+      const currentSchools = await getSchoolsFromDb();
+      const currentStaff = await getStaffFromDb();
+      return {
+        success: true,
+        schoolsCount: currentSchools.length,
+        staffCount: currentStaff.length,
+        lastSync
+      };
+    } catch (err: any) {
+      console.warn('[AutoSync Server] Aviso na sincronização automática:', err);
+      const currentSchools = await getSchoolsFromDb();
+      const currentStaff = await getStaffFromDb();
+      return {
+        success: false,
+        schoolsCount: currentSchools.length,
+        staffCount: currentStaff.length,
+        lastSync: new Date().toISOString()
+      };
+    }
+  }
+
+  // Auto-sync endpoints for client triggers or status polling
+  app.post('/api/sheets/auto-sync', async (_req: Request, res: Response) => {
+    const result = await syncGoogleSheetsDirectly();
+    res.json(result);
+  });
+
+  app.get('/api/sheets/auto-sync', async (_req: Request, res: Response) => {
+    const schools = await getSchoolsFromDb();
+    const staff = await getStaffFromDb();
+    res.json({ success: true, schoolsCount: schools.length, staffCount: staff.length });
   });
 
   // Users (Firebase Auth synchronization)
@@ -461,6 +634,16 @@ async function startServer() {
   const PORT = 3000;
   app.listen(PORT, '0.0.0.0', () => {
     console.log(`Cloud SQL Full-Stack Server listening on http://0.0.0.0:${PORT}`);
+
+    // Trigger initial background sync 2 seconds after server starts
+    setTimeout(() => {
+      syncGoogleSheetsDirectly().catch((e) => console.warn('[AutoSync Server] Initial sync notice:', e));
+    }, 2000);
+
+    // Periodically re-sync every 3 minutes so changes in Google Sheets reflect automatically
+    setInterval(() => {
+      syncGoogleSheetsDirectly().catch((e) => console.warn('[AutoSync Server] Periodic sync notice:', e));
+    }, 3 * 60 * 1000);
   });
 }
 

@@ -518,34 +518,99 @@ export function isAfternoonFullyCheckedIn(school: SchoolItem, checkIns: CheckInR
 }
 
 export interface ShiftKpiSummary {
-  totalSchools: number;
+  totalSchools: number; // Postos sob responsabilidade da PMESP
+  totalSchoolsAll?: number; // Total incluindo eventuais postos exclusivos GCM
+  morningExpectedSchools: number; // Postos com PMESP na manhã
   morningDone: number;
   morningPending: number;
+  afternoonExpectedSchools: number; // Postos com PMESP na tarde (obrigados à entrega de mídias)
   afternoonDone: number;
   afternoonPending: number;
   fullDayCount: number;
   mediaDeliveredCount: number;
   mediaPendingCount: number;
+  gcmMorningCount?: number;
+  gcmAfternoonCount?: number;
 }
 
 /**
- * Computes the key KPIs:
- * 1. Morning completed check-ins
- * 2. Morning pending
- * 3. Afternoon completed check-ins (including full-day officers checked in in the morning)
- * 4. Afternoon pending
- * 5. Mídias / Urnas entregues no Cartório Eleitoral (Turno da Tarde)
+ * Identifica se um policial ou membro do efetivo exerce função de Comando ou Supervisão
+ * (Comandante, Subcomandante, Coordenador Operacional, Supervisor, Oficial de Dia, CFP, CGP, etc.)
+ */
+export function isCommandOrSupervisionRole(officer?: any): boolean {
+  if (!officer) return false;
+  const rawRole =
+    officer.staff?.function ||
+    officer.function ||
+    officer.role ||
+    (officer.schoolItem && isRondaRoleOrSchool(officer.schoolItem.school) ? officer.schoolItem.school : '') ||
+    '';
+  const normRole = normalizeText(rawRole);
+  const rank = normalizeText(officer.staff?.rank || officer.rank || '');
+
+  // Exclui funções subalternas/apoio/motoristas se não for oficial de comando
+  const isDriverOrAux =
+    (normRole.includes('MOTORISTA') ||
+      normRole.includes('AUXILIAR') ||
+      normRole.includes('CONDUTOR')) &&
+    !rank.includes('TEN') &&
+    !rank.includes('CAP') &&
+    !rank.includes('MAJ') &&
+    !rank.includes('CEL');
+
+  if (isDriverOrAux) {
+    return false;
+  }
+
+  // Funções de comando e supervisão do Batalhão e Companhias
+  if (
+    normRole.includes('COMANDANTE') ||
+    normRole.includes('SUBCOMANDANTE') ||
+    normRole.includes('COORDENADOR') ||
+    normRole.includes('COORDOP') ||
+    normRole.includes('SUPERVIS') ||
+    normRole.includes('CGP') ||
+    normRole.includes('CFP') ||
+    normRole.includes('OFICIAL DE DIA') ||
+    normRole.includes('CHEFE') ||
+    normRole.includes('P/3') ||
+    normRole.includes('ESTADO MAIOR')
+  ) {
+    return true;
+  }
+
+  // Postos/Graduações de Oficiais
+  if (
+    rank.includes('TEN CEL') ||
+    rank.includes('MAJ') ||
+    rank.includes('CAP') ||
+    rank.includes('1 TEN') ||
+    rank.includes('2 TEN') ||
+    rank.includes('TENENTE') ||
+    rank.includes('OFICIAL') ||
+    rank.includes('CEL') ||
+    rank.includes('ASP')
+  ) {
+    return true;
+  }
+
+  return false;
+}
+
+/**
+ * Computa os KPIs operacionais com isolamento estrito da PMESP:
+ * 1. Postos com Guarda Civil Municipal (GCM) são 100% desconsiderados das metas de check-in da PM.
+ * 2. Na tarde, apenas os postos com Policiais Militares entram na meta de entrega de mídias/disquetes.
  */
 export function computeShiftKpis(schools: SchoolItem[], checkIns: CheckInRecord[]): ShiftKpiSummary {
-  // Only actual fixed polling stations count towards school check-ins
+  // Apenas postos eleitorais fixos reais contam (exclui viaturas/rondas)
   const validSchools = schools.filter(
     (s) => !isRondaRoleOrSchool(s.school, s.address || s.bairro)
   );
 
-  // Filter out any GCM check-in records completely
+  // Filtra registros de GCM para não interferir nas métricas
   const validCheckIns = (checkIns || []).filter((c) => !getCheckInInfo(c).isGcm);
 
-  const totalSchools = validSchools.length;
   let morningDone = 0;
   let afternoonDone = 0;
   let fullDayCount = 0;
@@ -553,28 +618,44 @@ export function computeShiftKpis(schools: SchoolItem[], checkIns: CheckInRecord[
 
   let morningExpectedSchools = 0;
   let afternoonExpectedSchools = 0;
+  let gcmMorningCount = 0;
+  let gcmAfternoonCount = 0;
 
   validSchools.forEach((school) => {
     const isFull = isSchoolFullDay(school);
     if (isFull) fullDayCount++;
 
+    // --- MANHÃ ---
     const amList = getSchoolAmOfficers(school);
     const pmespAm = amList.filter((o) => !isGcmOfficer(o));
-    if (pmespAm.length > 0 && !isGcmOfficer(school.am)) {
+    const isMorningGcm = isGcmOfficer(school.am) && pmespAm.length === 0;
+
+    if (isMorningGcm) {
+      gcmMorningCount++;
+    } else if (pmespAm.length > 0 || !isGcmOfficer(school.am)) {
+      // Posto de responsabilidade da PMESP na manhã
       morningExpectedSchools++;
       const amOk = Boolean(findMorningCheckIn(school, validCheckIns));
       if (amOk) morningDone++;
     }
 
+    // --- TARDE ---
     const pmList = getSchoolPmOfficers(school);
     const pmespPm = pmList.filter((o) => !isGcmOfficer(o));
-    if (pmespPm.length > 0 && !isGcmOfficer(school.pm)) {
+    const isAfternoonGcm = isGcmOfficer(school.pm) && pmespPm.length === 0;
+
+    if (isAfternoonGcm) {
+      gcmAfternoonCount++;
+    } else if (pmespPm.length > 0 || !isGcmOfficer(school.pm)) {
+      // Posto de responsabilidade da PMESP na tarde (inclusive entrega de mídias)
       afternoonExpectedSchools++;
       const pmRecord = findAfternoonCheckIn(school, validCheckIns);
       const pmOk = Boolean(pmRecord);
       if (pmOk) {
         afternoonDone++;
       }
+
+      // Entrega de mídias no Cartório Eleitoral (somente onde há PMESP à tarde)
       const schoolDelivered = pmList.some((off) => {
         const offRecord = findOfficerCheckIn(school, off, 'Tarde', validCheckIns);
         return Boolean(offRecord?.mediaDelivered);
@@ -588,16 +669,41 @@ export function computeShiftKpis(schools: SchoolItem[], checkIns: CheckInRecord[
 
   const morningPending = Math.max(0, morningExpectedSchools - morningDone);
   const afternoonPending = Math.max(0, afternoonExpectedSchools - afternoonDone);
-  const mediaPendingCount = Math.max(0, afternoonDone - mediaDeliveredCount);
+  // A pendência de mídias é sobre o total de escolas PMESP da tarde que ainda não entregaram
+  const mediaPendingCount = Math.max(0, afternoonExpectedSchools - mediaDeliveredCount);
+
+  // Total de postos sob custódia da PMESP (ao menos um turno PM)
+  const pmespDistinctSchools = validSchools.filter((s) => {
+    const amList = getSchoolAmOfficers(s).filter((o) => !isGcmOfficer(o));
+    const pmList = getSchoolPmOfficers(s).filter((o) => !isGcmOfficer(o));
+    const hasAm = pmespAmPresence(s, amList);
+    const hasPm = pmespPmPresence(s, pmList);
+    return hasAm || hasPm;
+  }).length;
+
+  function pmespAmPresence(school: SchoolItem, list: SchoolOfficer[]): boolean {
+    if (list.length > 0) return true;
+    return !isGcmOfficer(school.am);
+  }
+
+  function pmespPmPresence(school: SchoolItem, list: SchoolOfficer[]): boolean {
+    if (list.length > 0) return true;
+    return !isGcmOfficer(school.pm);
+  }
 
   return {
-    totalSchools,
+    totalSchools: pmespDistinctSchools > 0 ? pmespDistinctSchools : validSchools.length,
+    totalSchoolsAll: validSchools.length,
+    morningExpectedSchools,
     morningDone,
     morningPending,
+    afternoonExpectedSchools,
     afternoonDone,
     afternoonPending,
     fullDayCount,
     mediaDeliveredCount,
-    mediaPendingCount
+    mediaPendingCount,
+    gcmMorningCount,
+    gcmAfternoonCount
   };
 }
