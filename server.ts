@@ -10,6 +10,7 @@ import {
   getCheckInsFromDb,
   insertCheckInToDb,
   updateCheckInValidationInDb,
+  updateCheckInMediaDeliveryInDb,
   bulkUpdateCheckInValidationInDb,
   getRondasFromDb,
   insertRondaToDb,
@@ -210,6 +211,16 @@ async function startServer() {
     } catch (error: any) {
       console.error('Failed to validate check-in:', error);
       res.status(500).json({ error: error.message || 'Failed to update validation' });
+    }
+  });
+
+  app.patch('/api/checkins/:id/media-delivery', async (req: Request, res: Response) => {
+    try {
+      await updateCheckInMediaDeliveryInDb(req.params.id, req.body);
+      res.json({ success: true });
+    } catch (error: any) {
+      console.error('Failed to update media delivery:', error);
+      res.status(500).json({ error: error.message || 'Failed to update media delivery' });
     }
   });
 

@@ -66,6 +66,7 @@ import {
   isValidActiveRecord,
   updateCheckInsAuditBatchInCloud,
   mergeCheckInLists,
+  saveMediaDeliveryToCloud,
   DayRange
 } from './services/firestoreService';
 
@@ -82,6 +83,7 @@ import { DeviceManagementTab } from './components/DeviceManagementTab';
 import { OfficerDetailView } from './components/OfficerDetailView';
 import { CheckInModal } from './components/CheckInModal';
 import { RondaModal } from './components/RondaModal';
+import { MediaDeliveryModal } from './components/MediaDeliveryModal';
 import { GoogleSheetsConfigModal } from './components/GoogleSheetsConfigModal';
 import { ReportExportModal } from './components/ReportExportModal';
 import { ResetSystemModal } from './components/ResetSystemModal';
@@ -138,7 +140,9 @@ const EMPTY_KPIS: ShiftKpiSummary = {
   morningPending: 0,
   afternoonDone: 0,
   afternoonPending: 0,
-  fullDayCount: 0
+  fullDayCount: 0,
+  mediaDeliveredCount: 0,
+  mediaPendingCount: 0
 };
 
 // 'yyyy-mm-dd' of the device's local date
@@ -360,6 +364,11 @@ export default function App() {
     rank: string;
     defaultSchoolId?: string;
     sectorSchools?: SchoolItem[];
+  } | null>(null);
+
+  const [activeMediaDeliveryModal, setActiveMediaDeliveryModal] = useState<{
+    school: SchoolItem;
+    record: CheckInRecord;
   } | null>(null);
 
   // 5. Search State
@@ -1414,6 +1423,71 @@ export default function App() {
     );
   };
 
+  // Media Delivery confirmation (Cartório Eleitoral)
+  const handleConfirmMediaDelivery = async (deliveryData: {
+    mediaDelivered: boolean;
+    mediaDeliveredAt: string;
+    mediaDeliveredTimestamp: number;
+    mediaDeliveredProtocol: string;
+    mediaDeliveredLat: number | null;
+    mediaDeliveredLng: number | null;
+    mediaDeliveredAccuracy: number | null;
+    mediaDeliveredNotes?: string;
+  }) => {
+    if (!activeMediaDeliveryModal) return;
+    const { record, school } = activeMediaDeliveryModal;
+
+    try {
+      // 1. Optimistically update local state immediately
+      setCheckIns((prev) => {
+        const updated = prev.map((c) => {
+          if (c.id === record.id) {
+            return {
+              ...c,
+              ...deliveryData
+            };
+          }
+          return c;
+        });
+        try {
+          localStorage.setItem(STORAGE_KEYS.CHECKINS, JSON.stringify(updated));
+        } catch {}
+        return updated;
+      });
+
+      // 2. Persist media delivery to Cloud Backend / PostgreSQL
+      await saveMediaDeliveryToCloud(record.id, deliveryData);
+
+      // 3. Register security audit log
+      const auditLog = {
+        id: `audit_media_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`,
+        timestamp: Date.now(),
+        timeStr: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
+        actorRe: record.officerRe,
+        actorName: record.officerName,
+        actorRank: record.rank,
+        targetRe: 'CARTÓRIO ELEITORAL',
+        targetName: school.school,
+        action: 'MIDIAS_ENTREGUES',
+        details: `Mídias/Disquetes entregues no Cartório Eleitoral da ${school.school} (${school.city}). Protocolo: ${deliveryData.mediaDeliveredProtocol}. ${deliveryData.mediaDeliveredNotes ? `Obs: ${deliveryData.mediaDeliveredNotes}` : ''}`
+      };
+      saveAuditLogToCloud(auditLog).catch((err) =>
+        console.warn('Erro ao registrar log de entrega de mídia:', err)
+      );
+
+      // 4. Notification feedback
+      setSyncNotification({
+        type: 'success',
+        text: `Mídias da ${school.school} entregues com sucesso no Cartório! Protocolo: ${deliveryData.mediaDeliveredProtocol}`
+      });
+
+      setActiveMediaDeliveryModal(null);
+    } catch (err) {
+      console.error('Erro ao registrar entrega de mídias:', err);
+      setActiveMediaDeliveryModal(null);
+    }
+  };
+
   // Undo/Delete Check-In (Removes from state and deletes from Firestore)
   const handleDeleteCheckIn = async (
     checkInId: string,
@@ -1877,6 +1951,7 @@ export default function App() {
                     schoolsForOfficer.length > 0 ? schoolsForOfficer : fixedSchoolList
                 });
               }}
+              onOpenMediaDelivery={(school, record) => setActiveMediaDeliveryModal({ school, record })}
             />
           </div>
         ) : (
@@ -1946,6 +2021,7 @@ export default function App() {
                   afternoonPending={kpiSummary.afternoonPending}
                   totalRondas={totalRondas}
                   fullDayCount={kpiSummary.fullDayCount}
+                  mediaDeliveredCount={kpiSummary.mediaDeliveredCount}
                   onKpiClick={(type) => setActiveKpiModal(type)}
                   onRondasClick={() => setSupervisorTab('rondas')}
                 />
@@ -2103,6 +2179,7 @@ export default function App() {
                       staffList={staffList}
                       onSearchByRe={handleSearchByRe}
                       onDeleteCheckIn={handleDeleteCheckIn}
+                      onDeliverMedia={(school, record) => setActiveMediaDeliveryModal({ school, record })}
                       onSelectSchoolForCheckIn={(school, shift, officerParam) => {
                         const fallbackOfficer = shift === 'Manhã' ? school.am : school.pm;
                         const officer = officerParam || fallbackOfficer;
@@ -2359,6 +2436,17 @@ export default function App() {
           isOpen={Boolean(activeCheckInModal)}
           onClose={() => setActiveCheckInModal(null)}
           onConfirm={handleConfirmCheckIn}
+        />
+      )}
+
+      {/* Media Delivery Modal (Cartório Eleitoral) */}
+      {activeMediaDeliveryModal && (
+        <MediaDeliveryModal
+          school={activeMediaDeliveryModal.school}
+          checkInRecord={activeMediaDeliveryModal.record}
+          isOpen={Boolean(activeMediaDeliveryModal)}
+          onClose={() => setActiveMediaDeliveryModal(null)}
+          onConfirmDelivery={handleConfirmMediaDelivery}
         />
       )}
 

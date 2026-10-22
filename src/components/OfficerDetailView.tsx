@@ -20,7 +20,8 @@ import {
   School,
   ShieldCheck,
   UserCheck,
-  ExternalLink
+  ExternalLink,
+  PackageCheck
 } from 'lucide-react';
 import { StaffMember, SchoolItem, CheckInRecord, RondaRecord, DeviceBinding, SchoolOfficer } from '../types';
 import { normalizeText, matchesExactRe, normalizeRe } from '../utils/normalize';
@@ -54,6 +55,7 @@ interface OfficerDetailViewProps {
   onBack: () => void;
   onOpenCheckIn: () => void;
   onOpenRonda: (schoolId?: string) => void;
+  onOpenMediaDelivery?: (school: SchoolItem, checkInRecord: CheckInRecord) => void;
   isIndividualRestrictedMode?: boolean;
   onLogout?: () => void;
   onOpenSupervisorMode?: () => void;
@@ -77,6 +79,7 @@ export const OfficerDetailView: React.FC<OfficerDetailViewProps> = ({
   onBack,
   onOpenCheckIn,
   onOpenRonda,
+  onOpenMediaDelivery,
   isIndividualRestrictedMode = false,
   onLogout,
   onOpenSupervisorMode,
@@ -1181,6 +1184,63 @@ export const OfficerDetailView: React.FC<OfficerDetailViewProps> = ({
                           )}
                         </div>
                       </div>
+
+                      {/* Botão e Status de Entrega de Mídias no Cartório Eleitoral (Turno da Tarde / Término) */}
+                      {(postShift === 'Tarde' || postShift === 'Integral') && postCheckIn && (
+                        <div className="mt-3.5 pt-3.5 border-t border-slate-100">
+                          {postCheckIn.mediaDelivered ? (
+                            <div className="bg-gradient-to-r from-purple-50 via-emerald-50 to-white border border-purple-200/90 rounded-xl p-3.5 flex items-start gap-3 shadow-2xs">
+                              <div className="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-800 flex items-center justify-center shrink-0">
+                                <PackageCheck className="w-4 h-4 text-emerald-700" />
+                              </div>
+                              <div className="flex-1 min-w-0">
+                                <div className="flex items-center gap-2 flex-wrap">
+                                  <span className="text-xs sm:text-sm font-black text-purple-950">
+                                    Missão Concluída · Mídias Entregues no Cartório Eleitoral
+                                  </span>
+                                  <span className="text-[10px] font-black bg-emerald-600 text-white px-2 py-0.5 rounded-full uppercase">
+                                    Desmobilizado
+                                  </span>
+                                </div>
+                                <div className="mt-1 text-[11px] text-slate-600 font-mono flex items-center gap-3 flex-wrap">
+                                  <span>Entregue às: <strong>{postCheckIn.mediaDeliveredAt}</strong></span>
+                                  <span>Protocolo: <strong className="text-purple-800">{postCheckIn.mediaDeliveredProtocol}</strong></span>
+                                </div>
+                                {postCheckIn.mediaDeliveredNotes && (
+                                  <div className="mt-1 text-[11px] text-slate-600 italic">
+                                    "{postCheckIn.mediaDeliveredNotes}"
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          ) : (
+                            <div className="bg-purple-50/70 border border-purple-200 rounded-xl p-3.5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-2xs">
+                              <div className="flex items-start gap-2.5">
+                                <div className="w-8 h-8 rounded-lg bg-purple-100 text-purple-800 flex items-center justify-center shrink-0">
+                                  <PackageCheck className="w-4 h-4 text-purple-700" />
+                                </div>
+                                <div>
+                                  <div className="text-xs sm:text-sm font-black text-purple-950">
+                                    Entrega de Mídias e Boletins no Cartório Eleitoral
+                                  </div>
+                                  <p className="text-[11px] text-purple-800 font-medium mt-0.5 leading-tight">
+                                    Ao término da votação e entrega das mídias/disquetes no Cartório Eleitoral, confirme a entrega para oficializar o término da sua missão.
+                                  </p>
+                                </div>
+                              </div>
+                              <button
+                                type="button"
+                                id={`btn-deliver-media-${postSchool.id || postIdx}`}
+                                onClick={() => onOpenMediaDelivery?.(postSchool, postCheckIn)}
+                                className="w-full sm:w-auto px-4 py-2.5 bg-purple-700 hover:bg-purple-800 active:scale-[0.98] text-white text-xs font-black rounded-xl transition shadow-md flex items-center justify-center gap-2 cursor-pointer shrink-0 min-h-[42px]"
+                              >
+                                <PackageCheck className="w-4 h-4 text-purple-200" />
+                                <span>Entregar Mídias no Cartório</span>
+                              </button>
+                            </div>
+                          )}
+                        </div>
+                      )}
 
                       {/* Rendição Card */}
                       {postShift === 'Manhã' && rendicao && (

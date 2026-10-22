@@ -1,5 +1,5 @@
 import React from 'react';
-import { ShieldCheck, Car, ChevronRight } from 'lucide-react';
+import { ShieldCheck, Car, ChevronRight, PackageCheck } from 'lucide-react';
 
 export type KpiFilterType = 'morning_done' | 'morning_pending' | 'afternoon_done' | 'afternoon_pending';
 
@@ -11,6 +11,7 @@ interface KpiGridProps {
   afternoonPending: number;
   totalRondas?: number;
   fullDayCount?: number;
+  mediaDeliveredCount?: number;
   onKpiClick?: (type: KpiFilterType) => void;
   onRondasClick?: () => void;
 }
@@ -22,6 +23,7 @@ export const KpiGrid: React.FC<KpiGridProps> = ({
   afternoonDone,
   afternoonPending,
   totalRondas = 0,
+  mediaDeliveredCount,
   onKpiClick,
   onRondasClick
 }) => {
@@ -230,6 +232,48 @@ export const KpiGrid: React.FC<KpiGridProps> = ({
         </div>
       </div>
 
+      {/* Banner de Destaque: Entrega de Mídias no Cartório Eleitoral */}
+      <div className="bg-gradient-to-r from-[#0F2B48] via-purple-950 to-purple-900 text-white rounded-xl sm:rounded-2xl p-3 sm:p-4 shadow-sm border border-purple-500/40 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div className="flex items-center gap-3 min-w-0">
+          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-purple-500/30 border border-purple-400/40 flex items-center justify-center shrink-0">
+            <PackageCheck className="w-5 h-5 sm:w-6 sm:h-6 text-purple-200" />
+          </div>
+          <div className="min-w-0">
+            <div className="flex items-center gap-2 flex-wrap">
+              <span className="text-[10px] font-black uppercase tracking-wider bg-purple-500/40 text-purple-100 px-2 py-0.5 rounded border border-purple-400/30">
+                Desmobilização Eleitoral
+              </span>
+              <span className="text-xs font-bold text-purple-300">
+                Cartório Eleitoral
+              </span>
+            </div>
+            <h3 className="text-xs sm:text-sm font-black text-white mt-0.5 truncate">
+              Mídias / Disquetes de Urna Entregues no Cartório
+            </h3>
+            <p className="text-[10.5px] sm:text-xs text-purple-200/90 mt-0.5">
+              Acompanhamento em tempo real dos policiais que concluíram a entrega das mídias.
+            </p>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-3 bg-black/40 border border-purple-400/30 rounded-xl px-3.5 py-2 shrink-0 self-stretch sm:self-auto justify-between sm:justify-end">
+          <div className="text-left sm:text-right">
+            <div className="text-[10px] uppercase font-bold text-purple-300">Total Entregue</div>
+            <div className="flex items-baseline gap-1">
+              <span className="text-2xl sm:text-3xl font-black font-mono text-white">
+                {mediaDeliveredCount || 0}
+              </span>
+              <span className="text-xs text-purple-300 font-bold">
+                / {totalSchools}
+              </span>
+            </div>
+          </div>
+          <div className="text-xs font-black font-mono px-2.5 py-1 bg-purple-600 text-white rounded-lg shadow-2xs">
+            {totalSchools > 0 ? Math.round(((mediaDeliveredCount || 0) / totalSchools) * 100) : 0}%
+          </div>
+        </div>
+      </div>
+
       {/* Faixa inferior com Regra Operacional e Contadores */}
       <div className="bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-1.5 text-xs text-slate-600 shadow-2xs">
         <div className="flex items-center gap-1.5 text-[11px] leading-snug">
@@ -239,8 +283,17 @@ export const KpiGrid: React.FC<KpiGridProps> = ({
           </span>
         </div>
 
-        <div className="flex items-center gap-2.5 shrink-0 text-[10.5px] font-semibold text-slate-500 self-end sm:self-auto">
+        <div className="flex items-center gap-2.5 shrink-0 text-[10.5px] font-semibold text-slate-500 self-end sm:self-auto flex-wrap">
           <span>Total: <strong className="text-slate-900">{totalSchools}</strong> postos</span>
+          {typeof mediaDeliveredCount === 'number' && (
+            <span
+              className="flex items-center gap-1 text-purple-900 font-extrabold bg-purple-100/90 px-2 py-0.5 rounded border border-purple-300 shadow-2xs"
+              title="Quantidade de postos onde as mídias da urna já foram entregues no Cartório Eleitoral"
+            >
+              <PackageCheck className="w-3 h-3 text-purple-700" />
+              <span>Mídias no Cartório: <strong className="text-purple-950 font-mono">{mediaDeliveredCount}</strong>/{totalSchools}</span>
+            </span>
+          )}
           {totalRondas > 0 && (
             <button
               type="button"

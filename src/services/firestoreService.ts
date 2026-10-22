@@ -396,6 +396,48 @@ export async function updateCheckInAuditInCloud(
   }
 }
 
+export async function saveMediaDeliveryToCloud(
+  checkInId: string,
+  deliveryData: {
+    mediaDelivered: boolean;
+    mediaDeliveredAt?: string;
+    mediaDeliveredTimestamp?: number;
+    mediaDeliveredProtocol?: string;
+    mediaDeliveredLat?: number | null;
+    mediaDeliveredLng?: number | null;
+    mediaDeliveredAccuracy?: number | null;
+    mediaDeliveredNotes?: string;
+  }
+): Promise<void> {
+  // 1. Atualiza imediatamente no cache local e notifica os componentes na hora
+  const currentLocal = readLocalCheckInsCache();
+  const updatedLocal = currentLocal.map((c) => {
+    if (c.id === checkInId) {
+      return {
+        ...c,
+        ...deliveryData
+      };
+    }
+    return c;
+  });
+  writeLocalCheckInsCache(updatedLocal);
+  checkInListeners.forEach((cb) => cb(updatedLocal));
+
+  // 2. Persiste no servidor backend
+  try {
+    const res = await fetch(`/api/checkins/${checkInId}/media-delivery`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(deliveryData),
+    });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const serverData = await getCheckInsFromCloud();
+    checkInListeners.forEach((cb) => cb(serverData));
+  } catch (err) {
+    console.error('Aviso ao sincronizar entrega de mídias no backend:', err);
+  }
+}
+
 export async function updateCheckInsAuditBatchInCloud(
   checkInIds: string[],
   validationData: {

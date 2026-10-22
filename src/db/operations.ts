@@ -138,6 +138,11 @@ export async function getCheckInsFromDb(): Promise<CheckInRecord[]> {
           validatedTimestamp: r.validatedTimestamp ?? undefined,
           auditNotes: r.auditNotes ?? undefined,
           auditStatus: (r.auditStatus as CheckInRecord['auditStatus']) ?? undefined,
+          mediaDelivered: (r as any).mediaDelivered ?? false,
+          mediaDeliveredAt: (r as any).mediaDeliveredAt ?? undefined,
+          mediaDeliveredTimestamp: (r as any).mediaDeliveredTimestamp ?? undefined,
+          mediaDeliveredProtocol: (r as any).mediaDeliveredProtocol ?? undefined,
+          mediaDeliveredNotes: (r as any).mediaDeliveredNotes ?? undefined,
         }));
         memoryStore.checkins = list;
         persistStore();
@@ -244,6 +249,33 @@ export async function updateCheckInValidationInDb(
     }
   } catch (error) {
     console.warn('Postgres updateCheckInValidation notice:', (error as any)?.message || error);
+  }
+}
+
+export async function updateCheckInMediaDeliveryInDb(
+  id: string,
+  delivery: {
+    mediaDelivered: boolean;
+    mediaDeliveredAt?: string;
+    mediaDeliveredTimestamp?: number;
+    mediaDeliveredProtocol?: string;
+    mediaDeliveredLat?: number | null;
+    mediaDeliveredLng?: number | null;
+    mediaDeliveredAccuracy?: number | null;
+    mediaDeliveredNotes?: string;
+  }
+): Promise<void> {
+  const item = memoryStore.checkins.find((c) => c.id === id);
+  if (item) {
+    item.mediaDelivered = delivery.mediaDelivered;
+    if (delivery.mediaDeliveredAt !== undefined) item.mediaDeliveredAt = delivery.mediaDeliveredAt;
+    if (delivery.mediaDeliveredTimestamp !== undefined) item.mediaDeliveredTimestamp = delivery.mediaDeliveredTimestamp;
+    if (delivery.mediaDeliveredProtocol !== undefined) item.mediaDeliveredProtocol = delivery.mediaDeliveredProtocol;
+    if (delivery.mediaDeliveredLat !== undefined) item.mediaDeliveredLat = delivery.mediaDeliveredLat;
+    if (delivery.mediaDeliveredLng !== undefined) item.mediaDeliveredLng = delivery.mediaDeliveredLng;
+    if (delivery.mediaDeliveredAccuracy !== undefined) item.mediaDeliveredAccuracy = delivery.mediaDeliveredAccuracy;
+    if (delivery.mediaDeliveredNotes !== undefined) item.mediaDeliveredNotes = delivery.mediaDeliveredNotes;
+    persistStore();
   }
 }
 

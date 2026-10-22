@@ -63,6 +63,15 @@ export interface CheckInRecord {
   validatedTimestamp?: number;
   auditNotes?: string;
   auditStatus?: 'conforme' | 'irregular' | 'validado_ressalva' | 'pendente';
+  // Entrega de Mídias / Disquetes no Cartório Eleitoral (Turno da Tarde / Conclusão da Missão)
+  mediaDelivered?: boolean;
+  mediaDeliveredAt?: string;
+  mediaDeliveredTimestamp?: number;
+  mediaDeliveredProtocol?: string;
+  mediaDeliveredLat?: number | null;
+  mediaDeliveredLng?: number | null;
+  mediaDeliveredAccuracy?: number | null;
+  mediaDeliveredNotes?: string;
 }
 
 export interface RondaRecord {

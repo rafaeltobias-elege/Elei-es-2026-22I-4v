@@ -524,14 +524,17 @@ export interface ShiftKpiSummary {
   afternoonDone: number;
   afternoonPending: number;
   fullDayCount: number;
+  mediaDeliveredCount: number;
+  mediaPendingCount: number;
 }
 
 /**
- * Computes the 4 key KPIs:
+ * Computes the key KPIs:
  * 1. Morning completed check-ins
  * 2. Morning pending
  * 3. Afternoon completed check-ins (including full-day officers checked in in the morning)
  * 4. Afternoon pending
+ * 5. Mídias / Urnas entregues no Cartório Eleitoral (Turno da Tarde)
  */
 export function computeShiftKpis(schools: SchoolItem[], checkIns: CheckInRecord[]): ShiftKpiSummary {
   // Only actual fixed polling stations count towards school check-ins
@@ -546,6 +549,7 @@ export function computeShiftKpis(schools: SchoolItem[], checkIns: CheckInRecord[
   let morningDone = 0;
   let afternoonDone = 0;
   let fullDayCount = 0;
+  let mediaDeliveredCount = 0;
 
   let morningExpectedSchools = 0;
   let afternoonExpectedSchools = 0;
@@ -566,13 +570,25 @@ export function computeShiftKpis(schools: SchoolItem[], checkIns: CheckInRecord[
     const pmespPm = pmList.filter((o) => !isGcmOfficer(o));
     if (pmespPm.length > 0 && !isGcmOfficer(school.pm)) {
       afternoonExpectedSchools++;
-      const pmOk = Boolean(findAfternoonCheckIn(school, validCheckIns));
-      if (pmOk) afternoonDone++;
+      const pmRecord = findAfternoonCheckIn(school, validCheckIns);
+      const pmOk = Boolean(pmRecord);
+      if (pmOk) {
+        afternoonDone++;
+      }
+      const schoolDelivered = pmList.some((off) => {
+        const offRecord = findOfficerCheckIn(school, off, 'Tarde', validCheckIns);
+        return Boolean(offRecord?.mediaDelivered);
+      }) || Boolean(pmRecord?.mediaDelivered);
+
+      if (schoolDelivered) {
+        mediaDeliveredCount++;
+      }
     }
   });
 
   const morningPending = Math.max(0, morningExpectedSchools - morningDone);
   const afternoonPending = Math.max(0, afternoonExpectedSchools - afternoonDone);
+  const mediaPendingCount = Math.max(0, afternoonDone - mediaDeliveredCount);
 
   return {
     totalSchools,
@@ -580,6 +596,8 @@ export function computeShiftKpis(schools: SchoolItem[], checkIns: CheckInRecord[
     morningPending,
     afternoonDone,
     afternoonPending,
-    fullDayCount
+    fullDayCount,
+    mediaDeliveredCount,
+    mediaPendingCount
   };
 }
